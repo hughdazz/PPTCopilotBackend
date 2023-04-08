@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"quickstart/controllers"
+	"backend/controllers"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
