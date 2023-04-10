@@ -22,3 +22,7 @@ docker run -it --name some-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=admin -d my
 ```bash
 mysql -h host.docker.internal -P3307 -p
 ```
+
+## 项目结构
+
+标准的MVC框架，script中存了一些mysql脚本
