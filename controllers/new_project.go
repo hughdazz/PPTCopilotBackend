@@ -39,7 +39,7 @@ func (this *NewProjectController) Post() {
 	description := new_project_request.Description
 
 	// 创建项目
-	_, err := models.NewProject(name, description, &models.User{Id: user_id.(int)})
+	_, err := models.NewProject(name, description, user_id.(int))
 
 	if err != nil {
 		this.Ctx.Output.SetStatus(500)
@@ -53,5 +53,6 @@ func (this *NewProjectController) Post() {
 	this.Ctx.Output.SetStatus(200)
 	new_project_response.Code = 0
 	new_project_response.Message = "创建项目成功"
+	this.Data["json"] = new_project_response
 	this.ServeJSON()
 }

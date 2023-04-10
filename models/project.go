@@ -16,21 +16,16 @@ type Project struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
-// 初始化数据表
-func init() {
-	orm.RegisterDriver("mysql", orm.DRMySQL)
-
-	// 设置默认数据库
-	orm.RegisterDataBase("default", "mysql", "root:admin@tcp(host.docker.internal:3307)/now_db?charset=utf8&loc=Local")
-
-	// 注册定义的model
-	orm.RegisterModel(new(Project))
-}
-
-func NewProject(name string, description string, creator *User) (Project, error) {
+func NewProject(name string, description string, creator_id int) (Project, error) {
 	o := orm.NewOrm()
-	project := Project{Name: name, Description: description, Creator: creator}
-	_, err := o.Insert(&project)
+	var creator User
+	creator.Id = creator_id
+	err := o.Read(&creator)
+	if err != nil {
+		return Project{}, err
+	}
+	project := Project{Name: name, Description: description, Creator: &creator}
+	_, err = o.Insert(&project)
 	return project, err
 }
 

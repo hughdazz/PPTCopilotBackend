@@ -13,16 +13,6 @@ type User struct {
 	Email    string `orm:"size(100)"`
 }
 
-// 初始化数据表
-func init() {
-	orm.RegisterDriver("mysql", orm.DRMySQL)
-
-	// 设置默认数据库
-	orm.RegisterDataBase("default", "mysql", "root:admin@tcp(host.docker.internal:3307)/now_db?charset=utf8&loc=Local")
-	// 注册定义的model
-	orm.RegisterModel(new(User))
-}
-
 // 验证用户信息
 func VerifyUser(username_or_email string, password string) (User, error) {
 	// 通过用户名或邮箱获取用户信息
