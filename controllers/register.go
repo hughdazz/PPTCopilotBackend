@@ -33,14 +33,17 @@ func (this *RegisterController) Post() {
 	password := Register_request.Password
 	// repassword := Register_request.Repassword
 	// 添加新用户
-	_, err := models.CreateUser(username, password, email)
+	_, err, res := models.CreateUser(username, password, email)
 	var Register_response RegisterResponse
 
-	if err != nil {
+	if res != 0 && err == nil {
 		// 验证失败，返回错误信息
 		this.Ctx.Output.SetStatus(401)
 		Register_response.Code = 1
-		Register_response.Message = "注册错误"
+		Register_response.Message = "用户名重复"
+		if res == 1 {
+			Register_response.Message = "邮箱重复"
+		}
 		this.Data["json"] = Register_response
 		this.ServeJSON()
 		return
