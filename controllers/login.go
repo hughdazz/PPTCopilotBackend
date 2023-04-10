@@ -31,7 +31,7 @@ func (this *LoginController) Post() {
 	password := login_request.Password
 
 	// 验证用户名和密码是否正确
-	_, err := models.VerifyUser(username_or_email, password)
+	user, err := models.VerifyUser(username_or_email, password)
 
 	var login_response LoginResponse
 
@@ -44,6 +44,8 @@ func (this *LoginController) Post() {
 		this.ServeJSON()
 		return
 	}
+	// 成功，设置session
+	this.SetSession("user_id", user.Id)
 
 	this.Ctx.Output.SetStatus(200)
 	login_response.Code = 0
