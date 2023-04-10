@@ -34,11 +34,22 @@ func VerifyUser(username_or_email string, password string) (User, error) {
 }
 
 // 新建用户
-func CreateUser(username string, password string, email string) (User, error) {
+func CreateUser(username string, password string, email string) (User, error, int) {
 	o := orm.NewOrm()
-	user := User{Username: username, Password: password, Email: email}
-	_, err := o.Insert(&user)
-	return user, err
+	user := User{Username: username}
+	err := o.Read(&user, "Username")
+
+	if err == orm.ErrNoRows {
+		user := User{Email: email}
+		err = o.Read(&user, "Email")
+		if err == orm.ErrNoRows {
+			user := User{Username: username, Password: password, Email: email}
+			_, err := o.Insert(&user)
+			return user, err, 0
+		}
+		return user, err, 1
+	}
+	return user, err, 2
 }
 
 // 获取用户
