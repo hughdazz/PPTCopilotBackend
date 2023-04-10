@@ -13,12 +13,6 @@ type User struct {
 	Email    string `orm:"size(100)"`
 }
 
-// 初始化数据表
-func init() {
-	// 注册定义的model
-	orm.RegisterModel(new(User))
-}
-
 // 验证用户信息
 func VerifyUser(username_or_email string, password string) (User, error) {
 	// 通过用户名或邮箱获取用户信息
@@ -44,5 +38,13 @@ func CreateUser(username string, password string, email string) (User, error) {
 	o := orm.NewOrm()
 	user := User{Username: username, Password: password, Email: email}
 	_, err := o.Insert(&user)
+	return user, err
+}
+
+// 获取用户
+func GetUser(id int) (User, error) {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
 	return user, err
 }
