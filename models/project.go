@@ -20,11 +20,15 @@ func NewProject(name string, description string, creator_id int) (Project, error
 	o := orm.NewOrm()
 	var creator User
 	creator.Id = creator_id
+	// 根据id获取用户信息
 	err := o.Read(&creator)
 	if err != nil {
+		// 用户不存在
 		return Project{}, err
 	}
+
 	project := Project{Name: name, Description: description, Creator: &creator}
+	// 创建项目
 	_, err = o.Insert(&project)
 	return project, err
 }
@@ -34,4 +38,11 @@ func GetProject(id int) (Project, error) {
 	project := Project{Id: id}
 	err := o.Read(&project)
 	return project, err
+}
+
+func GetProjects(id int) ([]Project, error) {
+	o := orm.NewOrm()
+	var projects []Project
+	_, err := o.QueryTable("project").Filter("creator_id", id).All(&projects)
+	return projects, err
 }
