@@ -7,7 +7,7 @@ import (
 	beego "github.com/beego/beego/v2/server/web"
 )
 
-type ProjectController struct {
+type ProjectsController struct {
 	beego.Controller
 }
 
@@ -19,6 +19,7 @@ type NewProjectRequest struct {
 type NewProjectResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
+	Id      int    `json:"id"`
 }
 
 type GetProjectsResponse struct {
@@ -29,7 +30,7 @@ type GetProjectsResponse struct {
 
 // Post方法
 // 新建项目
-func (this *ProjectController) Post() {
+func (this *ProjectsController) Post() {
 	var new_project_response NewProjectResponse
 	// 获取user_id
 	user_id := this.GetSession("user_id")
@@ -47,12 +48,13 @@ func (this *ProjectController) Post() {
 	description := new_project_request.Description
 
 	// 创建项目
-	_, err := models.NewProject(name, description, user_id.(int))
+	project, err := models.NewProject(name, description, user_id.(int))
 
 	if err != nil {
 		this.Ctx.Output.SetStatus(500)
 		new_project_response.Code = 1
 		new_project_response.Message = "创建项目失败"
+		new_project_response.Id = -1
 		this.Data["json"] = new_project_response
 		this.ServeJSON()
 		return
@@ -61,11 +63,12 @@ func (this *ProjectController) Post() {
 	this.Ctx.Output.SetStatus(200)
 	new_project_response.Code = 0
 	new_project_response.Message = "创建项目成功"
+	new_project_response.Id = project.Id
 	this.Data["json"] = new_project_response
 	this.ServeJSON()
 }
 
-func (this *ProjectController) Get() {
+func (this *ProjectsController) Get() {
 	var get_projects_response GetProjectsResponse
 	// 获取user_id
 	user_id := this.GetSession("user_id")

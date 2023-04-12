@@ -46,3 +46,19 @@ func GetProjects(id int) ([]Project, error) {
 	_, err := o.QueryTable("project").Filter("creator_id", id).All(&projects)
 	return projects, err
 }
+
+func DeleteProject(id int) error {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		// 使用 Delete() 函数删除对象
+		_, err := o.Delete(&project)
+		if err != nil {
+			return err
+		}
+	} else {
+		return err
+	}
+	return nil
+}
