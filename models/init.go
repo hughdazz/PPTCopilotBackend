@@ -9,6 +9,7 @@ func init() {
 	// 注册定义的model
 	orm.RegisterModel(new(User))
 	orm.RegisterModel(new(Project))
+	orm.RegisterModel(new(File))
 
 	// 如果表不存在则创建表
 	orm.RunSyncdb("default", false, true)
