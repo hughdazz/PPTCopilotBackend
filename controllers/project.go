@@ -26,11 +26,13 @@ func (this *ProjectController) Delete() {
 	err := models.DeleteProject(projectId)
 
 	if err != nil {
+		this.Ctx.Output.SetStatus(500)
 		delete_response.Code = 1
 		delete_response.Message = "删除失败"
 		delete_response.Id = projectId
 
 	} else {
+		this.Ctx.Output.SetStatus(200)
 		delete_response.Code = 0
 		delete_response.Message = "删除成功"
 		delete_response.Id = projectId
@@ -38,4 +40,5 @@ func (this *ProjectController) Delete() {
 
 	this.Data["json"] = delete_response
 	this.ServeJSON()
+	return
 }

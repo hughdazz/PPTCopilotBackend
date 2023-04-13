@@ -33,6 +33,18 @@ func NewProject(name string, description string, creator_id int) (Project, error
 	return project, err
 }
 
+func UpdataProject(id int) error {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	if err := o.Read(&project); err != nil {
+		return err
+	}
+	if _, err := o.Update(&project); err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetProject(id int) (Project, error) {
 	o := orm.NewOrm()
 	project := Project{Id: id}
