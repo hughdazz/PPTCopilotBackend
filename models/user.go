@@ -59,3 +59,32 @@ func GetUser(id int) (User, error) {
 	err := o.Read(&user)
 	return user, err
 }
+
+// 更新密码
+func UpdatePassword(email string, newPassword string) error {
+	// 查询邮箱对应的用户
+	o := orm.NewOrm()
+	user := User{Email: email}
+	err := o.Read(&user, "Email")
+
+	if err != nil {
+		return err
+	}
+
+	// 更新用户密码
+	user.Password = newPassword
+	_, err = o.Update(&user, "Password")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// 通过邮箱获得用户
+func GetUserByEmail(email string) (User, error) {
+	o := orm.NewOrm()
+	user := User{Email: email}
+	err := o.Read(&user, "Email")
+	return user, err
+}

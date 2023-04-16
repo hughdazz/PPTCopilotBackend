@@ -14,6 +14,9 @@ func init() {
 	beego.Router("/projects", &controllers.ProjectsController{})
 	beego.Router("/projects/:project_id", &controllers.ProjectController{})
 	beego.Router("/projects/:project_id/files", &controllers.FilesController{})
+	beego.Router("/resetpassword", &controllers.ResetPasswordController{})
+	beego.Router("/sendverifyemail", &controllers.ForgetPasswdController{}, "post:SendVerificationEmail")
+	beego.Router("/checkverifyemail", &controllers.ForgetPasswdController{}, "post:CheckVerificationEmail")
 
 	gptService := beego.NewNamespace("/gpt",
 		beego.NSRouter("/set_api_key", &controllers.GptController{}, "post:SetApiKey"),
