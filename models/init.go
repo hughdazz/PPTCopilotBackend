@@ -11,6 +11,7 @@ func init() {
 	orm.RegisterModel(new(Project))
 	orm.RegisterModel(new(File))
 	orm.RegisterModel(new(GptInfo))
+	orm.RegisterModel(new(EmailVerification))
 
 	// 如果表不存在则创建表
 	orm.RunSyncdb("default", false, true)
