@@ -51,6 +51,7 @@ func (this *LoginController) Post() {
 	login_response.Code = 0
 	login_response.Message = "登录成功"
 	this.Data["json"] = login_response
+
 	this.ServeJSON()
 }
 

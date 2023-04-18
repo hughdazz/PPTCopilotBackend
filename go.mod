@@ -7,6 +7,7 @@ require github.com/beego/beego/v2 v2.0.7
 require github.com/go-sql-driver/mysql v1.7.0
 
 require (
+	github.com/astaxie/beego v1.12.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
