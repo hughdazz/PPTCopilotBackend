@@ -45,7 +45,12 @@ func (this *LoginController) Post() {
 		return
 	}
 	// 成功，设置session
-	this.SetSession("user_id", user.Id)
+	// this.SetSession("user_id", user.Id)
+
+	//创建token
+	tokenString := models.CreateToken(user.Id)
+	this.Ctx.Output.Header("TOKEN", tokenString)
+	this.Ctx.SetCookie("token", tokenString, "3600", "/")
 
 	this.Ctx.Output.SetStatus(200)
 	login_response.Code = 0
