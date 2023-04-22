@@ -1,6 +1,9 @@
 package models
 
 import (
+	"os"
+	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -53,4 +56,52 @@ func GetFiles(id int) ([]File, error) {
 	var files []File
 	_, err := o.QueryTable("file").Filter("project_id", id).All(&files)
 	return files, err
+}
+
+func DeleteDir(project_id int) error {
+	saveDir := "static/files/" + strconv.Itoa(project_id)
+	err := os.RemoveAll(saveDir)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteFile(file_name string, project_id int) int {
+	file, res := GetFileInProjectByName(file_name, project_id)
+	if res != 0 {
+		// 文件不存在
+		return 1
+	}
+	o := orm.NewOrm()
+	_, err := o.Delete(&file)
+	if err != nil {
+		return 2 //文件结构删除错误
+	}
+
+	path := GetFilePathByName(file_name, project_id)
+	err = DeleteFileByPath(path)
+
+	if err != nil {
+		//文件删除错误
+		return 3
+	}
+	return 0
+}
+
+func DeleteFileByPath(path string) error {
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+	err = os.Remove(absPath)
+	return err
+}
+
+func GetFilePathByName(file_name string, project_id int) string {
+
+	saveDir := "static/files/" + strconv.Itoa(project_id)
+
+	filePath := saveDir + "/" + file_name
+	return filePath
 }
