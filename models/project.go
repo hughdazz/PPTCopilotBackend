@@ -65,6 +65,10 @@ func DeleteProject(id int) error {
 	err := o.Read(&project)
 	if err == nil {
 		// 使用 Delete() 函数删除对象
+		DeleteDir(id)
+		if err != nil {
+			return err
+		}
 		_, err := o.Delete(&project)
 		if err != nil {
 			return err
