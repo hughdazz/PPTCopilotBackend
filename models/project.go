@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -77,4 +78,24 @@ func DeleteProject(id int) error {
 		return err
 	}
 	return nil
+}
+
+func SearchProjects(keywords []string) ([]Project, error) {
+	o := orm.NewOrm()
+
+	// 构造 SQL 语句
+	sql := "SELECT * FROM project WHERE 1=1"
+	for _, keyword := range keywords {
+		// 使用 OR 连接多个关键词
+		sql += fmt.Sprintf(" AND (name LIKE '%%%s%%' OR description LIKE '%%%s%%')", keyword, keyword)
+	}
+
+	// 执行 SQL 查询
+	var projects []Project
+	_, err := o.Raw(sql).QueryRows(&projects)
+	if err != nil {
+		return nil, err
+	}
+
+	return projects, nil
 }
