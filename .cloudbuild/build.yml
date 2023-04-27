@@ -16,7 +16,4 @@ steps:
       name: "sh"
       inputs:
         command: "echo hello"
-  - ls:
-      name: "ls"
-      inputs:
-        command: "ls"
+
