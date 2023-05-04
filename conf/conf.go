@@ -1,9 +1,5 @@
 package conf
 
-import (
-	"gopkg.in/ini.v1"
-)
-
 type GptConfig struct {
 	GptApiUrl                  string
 	GptModel                   string
@@ -24,36 +20,36 @@ type EmailVerifyConfig struct {
 var GptConfigInstance GptConfig
 var EmailVerifyConfigInstance EmailVerifyConfig
 
-func init() {
-	cfg, err := ini.Load("./conf/gpt.conf")
-	if err != nil {
-		panic("Failed to read gpt config file: " + err.Error())
-	}
+// func init() {
+// 	cfg, err := ini.Load("./conf/gpt.conf")
+// 	if err != nil {
+// 		panic("Failed to read gpt config file: " + err.Error())
+// 	}
 
-	emailcfg, err := ini.Load("./conf/emailverify.conf")
+// 	emailcfg, err := ini.Load("./conf/emailverify.conf")
 
-	if err != nil {
-		panic("Failed to read email config file: " + err.Error())
-	}
+// 	if err != nil {
+// 		panic("Failed to read email config file: " + err.Error())
+// 	}
 
-	// 读取配置项
-	GptConfigInstance = GptConfig{
-		GptApiUrl:                  cfg.Section("").Key("gpt_api_url").String(),
-		GptModel:                   cfg.Section("").Key("gpt_model").String(),
-		GptProxy:                   cfg.Section("").Key("gpt_proxy").String(),
-		CatalogPromptTemplate:      cfg.Section("").Key("catalog_prompt_template").String(),
-		UpdateSinglePromptTemplate: cfg.Section("").Key("single_page_prompt_template").String(),
-	}
+// 	// 读取配置项
+// 	GptConfigInstance = GptConfig{
+// 		GptApiUrl:                  cfg.Section("").Key("gpt_api_url").String(),
+// 		GptModel:                   cfg.Section("").Key("gpt_model").String(),
+// 		GptProxy:                   cfg.Section("").Key("gpt_proxy").String(),
+// 		CatalogPromptTemplate:      cfg.Section("").Key("catalog_prompt_template").String(),
+// 		UpdateSinglePromptTemplate: cfg.Section("").Key("single_page_prompt_template").String(),
+// 	}
 
-	EmailVerifyConfigInstance = EmailVerifyConfig{
-		mailer:   emailcfg.Section("").Key("mailer").String(),
-		host:     emailcfg.Section("").Key("host").String(),
-		port:     emailcfg.Section("").Key("port").MustInt(),
-		username: emailcfg.Section("").Key("username").String(),
-		password: emailcfg.Section("").Key("password").String(),
-		from:     emailcfg.Section("").Key("from").String(),
-	}
-}
+// 	EmailVerifyConfigInstance = EmailVerifyConfig{
+// 		mailer:   emailcfg.Section("").Key("mailer").String(),
+// 		host:     emailcfg.Section("").Key("host").String(),
+// 		port:     emailcfg.Section("").Key("port").MustInt(),
+// 		username: emailcfg.Section("").Key("username").String(),
+// 		password: emailcfg.Section("").Key("password").String(),
+// 		from:     emailcfg.Section("").Key("from").String(),
+// 	}
+// }
 
 func GetGptApiUrl() string {
 	return GptConfigInstance.GptApiUrl
