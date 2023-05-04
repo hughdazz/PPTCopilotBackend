@@ -14,7 +14,7 @@ type LogoutResponse struct {
 }
 
 func (this *LogoutController) Delete() {
-	this.DelSession("user_id")
+	// this.DelSession("user_id")
 
 	// 会有登出失败的情况吗？
 

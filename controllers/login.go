@@ -19,6 +19,7 @@ type LoginRequest struct {
 type LoginResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
+	Token   string `json:"token"`
 }
 
 func (this *LoginController) Post() {
@@ -47,14 +48,15 @@ func (this *LoginController) Post() {
 	// 成功，设置session
 	// this.SetSession("user_id", user.Id)
 
-	//创建token
+	// 创建token
 	tokenString := models.CreateToken(user.Id)
-	this.Ctx.Output.Header("TOKEN", tokenString)
-	this.Ctx.SetCookie("token", tokenString, "3600", "/")
+	// this.Ctx.Output.Header("TOKEN", tokenString)
+	// this.Ctx.SetCookie("token", tokenString, "3600", "/")
 
 	this.Ctx.Output.SetStatus(200)
 	login_response.Code = 0
 	login_response.Message = "登录成功"
+	login_response.Token = tokenString
 	this.Data["json"] = login_response
 
 	this.ServeJSON()
