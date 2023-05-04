@@ -48,7 +48,7 @@ func (this *LoginController) Post() {
 	// 成功，设置session
 	// this.SetSession("user_id", user.Id)
 
-	//创建token
+	// 创建token
 	tokenString := models.CreateToken(user.Id)
 	this.Ctx.Output.Header("token", tokenString)
 	this.Ctx.SetCookie("token", tokenString, "3600", "/")

@@ -4,15 +4,18 @@ go 1.19
 
 require github.com/beego/beego/v2 v2.0.7
 
-require github.com/go-sql-driver/mysql v1.7.0
+require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-sql-driver/mysql v1.7.0
+	github.com/google/uuid v1.3.0
+	gopkg.in/ini.v1 v1.67.0
+)
 
 require (
-	github.com/astaxie/beego v1.12.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/kr/text v0.1.0 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
