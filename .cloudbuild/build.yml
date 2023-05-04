@@ -1,0 +1,19 @@
+# This YAML is the default template and can be modified based on this 
+---
+version: 2.0
+steps:
+  PRE_BUILD:
+  - checkout:
+      name: "checkout"
+      inputs:
+        scm: "codehub"
+        url: "git@codehub.devcloud.cn-north-4.huaweicloud.com:PowerPointCopilot00002/PPTCopilot-backend.git"
+        branch: "master"
+        lfs: false
+        submodule: false
+  BUILD:
+  - sh:
+      name: "sh"
+      inputs:
+        command: "echo hello"
+

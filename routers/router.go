@@ -64,6 +64,7 @@ func init() {
 	beego.Router("/projects/:project_id", &controllers.ProjectController{})
 	beego.Router("/projects/:project_id/files", &controllers.FilesController{})
 	beego.Router("/projects/:project_id/files/:file_name", &controllers.FileController{})
+	beego.Router("/search_project?:filter_words", &controllers.SearchController{})
 	beego.Router("/resetpassword", &controllers.ResetPasswordController{})
 	beego.Router("/sendverifyemail", &controllers.ForgetPasswdController{}, "post:SendVerificationEmail")
 	beego.Router("/checkverifyemail", &controllers.ForgetPasswdController{}, "post:CheckVerificationEmail")
