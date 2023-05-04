@@ -50,8 +50,8 @@ func (this *LoginController) Post() {
 
 	// 创建token
 	tokenString := models.CreateToken(user.Id)
-	// this.Ctx.Output.Header("TOKEN", tokenString)
-	// this.Ctx.SetCookie("token", tokenString, "3600", "/")
+	this.Ctx.Output.Header("token", tokenString)
+	this.Ctx.SetCookie("token", tokenString, "3600", "/")
 
 	this.Ctx.Output.SetStatus(200)
 	login_response.Code = 0
