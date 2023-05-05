@@ -2,6 +2,7 @@ package routers
 
 import (
 	"backend/controllers"
+	"backend/controllers/project"
 	"backend/controllers/user"
 
 	beego "github.com/beego/beego/v2/server/web"
@@ -20,6 +21,14 @@ func init() {
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
 	)
 	beego.AddNamespace(userController)
+
+	projectController := beego.NewNamespace("/project",
+		beego.NSRouter("/", &project.Controller{}, "get:GetAll;post:CreateProject"),
+		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;put:UpdateProject;delete:DeleteProject"),
+		beego.NSRouter("/:id/files", &project.Controller{}, "get:GetFiles"),
+		beego.NSRouter("/:id/files/:file_name", &project.Controller{}, "get:GetFile;put:UpdateFile;delete:DeleteFile"),
+	)
+	beego.AddNamespace(projectController)
 
 	// beego.Router("/login", &controllers.LoginController{})
 	// beego.Router("/register", &controllers.RegisterController{})
