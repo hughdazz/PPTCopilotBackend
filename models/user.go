@@ -42,7 +42,7 @@ func VerifyUser(username_or_email string, password string) (User, error) {
 }
 
 // 新建用户
-func CreateUser(username string, password string, email string) (User, error, int) {
+func CreateUser(username string, password string, email string) (User, error) {
 	o := orm.NewOrm()
 	user := User{Username: username}
 	err := o.Read(&user, "Username")
@@ -53,11 +53,11 @@ func CreateUser(username string, password string, email string) (User, error, in
 		if err == orm.ErrNoRows {
 			user := User{Username: username, Password: password, Email: email}
 			_, err := o.Insert(&user)
-			return user, err, 0
+			return user, err
 		}
-		return user, err, 1
+		return user, err
 	}
-	return user, err, 2
+	return user, err
 }
 
 // 获取用户
