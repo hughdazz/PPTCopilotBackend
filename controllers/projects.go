@@ -52,7 +52,7 @@ func (this *ProjectsController) Post() {
 
 	// 创建项目
 	// project, err := models.NewProject(name, description, user_id.(int))
-	project, err := models.NewProject(name, description, user_id)
+	project, err := models.CreateProject(name, description, user_id)
 
 	if err != nil {
 		this.Ctx.Output.SetStatus(500)

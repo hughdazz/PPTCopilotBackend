@@ -17,7 +17,7 @@ type Project struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
-func NewProject(name string, description string, creator_id int) (Project, error) {
+func CreateProject(name string, description string, creator_id int) (Project, error) {
 	o := orm.NewOrm()
 	var creator User
 	creator.Id = creator_id
@@ -58,6 +58,13 @@ func GetProjects(id int) ([]Project, error) {
 	var projects []Project
 	_, err := o.QueryTable("project").Filter("creator_id", id).All(&projects)
 	return projects, err
+}
+
+func GetAllProjects() []Project {
+	o := orm.NewOrm()
+	var projects []Project
+	o.QueryTable("project").All(&projects)
+	return projects
 }
 
 func DeleteProject(id int) error {

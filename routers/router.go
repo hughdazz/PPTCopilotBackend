@@ -9,11 +9,13 @@ import (
 )
 
 func init() {
+	// 跨域以及权限控制
 	beego.InsertFilter("*", beego.BeforeRouter, cors_access)
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/init", &controllers.InitController{})
 
+	// User相关
 	userController := beego.NewNamespace("/user",
 		beego.NSRouter("/", &user.Controller{}, "get:GetAll;post:CreateUser"),
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
@@ -22,6 +24,7 @@ func init() {
 	)
 	beego.AddNamespace(userController)
 
+	// Project相关
 	projectController := beego.NewNamespace("/project",
 		beego.NSRouter("/", &project.Controller{}, "get:GetAll;post:CreateProject"),
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;put:UpdateProject;delete:DeleteProject"),
