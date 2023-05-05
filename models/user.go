@@ -64,6 +64,13 @@ func UpdateUserEmail(id int, email string) error {
 	return nil
 }
 
+func DeleteUser(id int) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	_, err := o.Delete(&user)
+	return err
+}
+
 // 验证用户信息
 func VerifyUser(username_or_email string, password string) (User, error) {
 	// 通过用户名或邮箱获取用户信息
