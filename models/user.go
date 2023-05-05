@@ -8,9 +8,17 @@ import (
 // 用户信息
 type User struct {
 	Id       int
-	Username string `orm:"size(100)"`
-	Password string `orm:"size(100)"`
-	Email    string `orm:"size(100)"`
+	Username string `orm:"size(100);column(username)"`
+	Password string `orm:"size(100);column(password)"`
+	Email    string `orm:"size(100);column(email)"`
+}
+
+func GetAllUsers() []*User {
+	o := orm.NewOrm()
+	users := make([]*User, 0)
+	qs := o.QueryTable("user")
+	qs.All(&users)
+	return users
 }
 
 // 验证用户信息
