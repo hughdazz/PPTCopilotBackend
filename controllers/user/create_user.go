@@ -16,11 +16,13 @@ func (this *Controller) CreateUser() {
 	this.ParseForm(&request)
 	user, err := models.CreateUser(request.Username, request.Password, request.Email)
 	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(401, err.Error(), nil)
+		this.Ctx.Output.SetStatus(401)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	this.Data["json"] = controllers.MakeResponse(200, "success", user)
+	this.Ctx.Output.SetStatus(200)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", user)
 	this.ServeJSON()
 }

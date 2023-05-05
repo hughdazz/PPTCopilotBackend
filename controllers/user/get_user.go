@@ -11,16 +11,18 @@ func (this *Controller) GetUser() {
 	id_ := this.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(id_)
 	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(401, err.Error(), nil)
+		this.Ctx.Output.SetStatus(401)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 	user, err := models.GetUser(id)
 	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(401, err.Error(), nil)
+		this.Ctx.Output.SetStatus(401)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
-	this.Data["json"] = controllers.MakeResponse(200, "success", user)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", user)
 	this.ServeJSON()
 }

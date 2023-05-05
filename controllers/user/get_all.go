@@ -6,6 +6,7 @@ import (
 )
 
 func (this *Controller) GetAll() {
-	this.Data["json"] = controllers.MakeResponse(200, "success", models.GetAllUsers())
+	this.Ctx.Output.SetStatus(200)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", models.GetAllUsers())
 	this.ServeJSON()
 }
