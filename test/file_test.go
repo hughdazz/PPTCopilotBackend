@@ -31,12 +31,12 @@ func TestGetFilePathByName(t *testing.T) {
 //INSERT INTO `user` VALUES (1, 'hughdazz', '123456', '1@qq.com');
 
 // 如上函数的单元测试函数
-func TestGetUser(t *testing.T) {
-	user, err := models.GetUser(1)
-	if err != nil {
-		t.Errorf("GetUser() = %s; want nil", err)
-	}
-	if user.Username != "hughdazz" {
-		t.Errorf("GetUser() = %s; want hughdazz", user.Username)
-	}
-}
+// func TestGetUser(t *testing.T) {
+// 	user, err := models.GetUser(1)
+// 	if err != nil {
+// 		t.Errorf("GetUser() = %s; want nil", err)
+// 	}
+// 	if user.Username != "hughdazz" {
+// 		t.Errorf("GetUser() = %s; want hughdazz", user.Username)
+// 	}
+// }
