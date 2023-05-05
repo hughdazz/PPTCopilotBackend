@@ -7,10 +7,10 @@ import (
 
 // 用户信息
 type User struct {
-	Id       int
-	Username string `orm:"size(100);column(username)"`
-	Password string `orm:"size(100);column(password)"`
-	Email    string `orm:"size(100);column(email)"`
+	Id       int    `orm:"column(id);pk"`
+	Username string `orm:"size(100);column(username);unique"`
+	Password string `orm:"size(100);column(password);"`
+	Email    string `orm:"size(100);column(email);unique"`
 }
 
 func GetAllUsers() []*User {
@@ -19,6 +19,49 @@ func GetAllUsers() []*User {
 	qs := o.QueryTable("user")
 	qs.All(&users)
 	return users
+}
+
+func UpdateUserUsername(id int, username string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Username = username
+	_, err = o.Update(&user, "Username")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func UpdateUserPassword(id int, password string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Password = password
+	_, err = o.Update(&user, "Password")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func UpdateUserEmail(id int, email string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Email = email
+	_, err = o.Update(&user, "Email")
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // 验证用户信息
