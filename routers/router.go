@@ -2,12 +2,22 @@ package routers
 
 import (
 	"backend/controllers"
+	"backend/controllers/user"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {
 	beego.InsertFilter("*", beego.BeforeRouter, cors_access)
+
+	userController := beego.NewNamespace("/user",
+		beego.NSRouter("/", &user.Controller{}, "get:GetAllUsers;post:CreateUser"),
+		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
+		beego.NSRouter("/:id/password", &user.Controller{}, "put:UpdatePassword"),
+		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
+		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
+	)
+	beego.AddNamespace(userController)
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/login", &controllers.LoginController{})
