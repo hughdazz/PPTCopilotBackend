@@ -37,6 +37,8 @@ func init() {
 	// Gpt相关
 	gptController := beego.NewNamespace("/gpt",
 		beego.NSRouter("gen_outline", &gpt.Controller{}, "post:GenOutline"),
+		beego.NSRouter("update_slide", &gpt.Controller{}, "post:UpdateSlide"),
+		beego.NSRouter("guide_slide", &gpt.Controller{}, "post:GuideSlide"),
 	)
 	beego.AddNamespace(gptController)
 
