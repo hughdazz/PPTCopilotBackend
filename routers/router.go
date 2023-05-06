@@ -2,6 +2,7 @@ package routers
 
 import (
 	"backend/controllers"
+	"backend/controllers/gpt"
 	"backend/controllers/project"
 	"backend/controllers/user"
 
@@ -28,10 +29,16 @@ func init() {
 	projectController := beego.NewNamespace("/project",
 		beego.NSRouter("/", &project.Controller{}, "get:GetAll;post:CreateProject"),
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;put:UpdateProject;delete:DeleteProject"),
-		beego.NSRouter("/:id/files", &project.Controller{}, "get:GetFiles;post:CreateFile"),
-		beego.NSRouter("/:id/files/:file_name", &project.Controller{}, "get:GetFile;put:UpdateFile;delete:DeleteFile"),
+		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
+		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;put:UpdateFile;delete:DeleteFile"),
 	)
 	beego.AddNamespace(projectController)
+
+	// Gpt相关
+	gptController := beego.NewNamespace("/gpt",
+		beego.NSRouter("gen_outline", &gpt.Controller{}, "post:GenOutline"),
+	)
+	beego.AddNamespace(gptController)
 
 	// beego.Router("/login", &controllers.LoginController{})
 	// beego.Router("/register", &controllers.RegisterController{})
