@@ -2,6 +2,7 @@ package routers
 
 import (
 	"backend/controllers"
+	"backend/controllers/email"
 	"backend/controllers/gpt"
 	"backend/controllers/project"
 	"backend/controllers/user"
@@ -41,6 +42,13 @@ func init() {
 		beego.NSRouter("guide_slide", &gpt.Controller{}, "post:GuideSlide"),
 	)
 	beego.AddNamespace(gptController)
+
+	// email相关
+	emailController := beego.NewNamespace("/email",
+		beego.NSRouter("send_email", &email.Controller{}, "post:SendEmail"),
+		beego.NSRouter("verify_email", &email.Controller{}, "post:VerifyEmail"),
+	)
+	beego.AddNamespace(emailController)
 
 	// beego.Router("/login", &controllers.LoginController{})
 	// beego.Router("/register", &controllers.RegisterController{})
