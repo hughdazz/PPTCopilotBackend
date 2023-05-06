@@ -3,6 +3,7 @@ package project
 import (
 	"backend/controllers"
 	"backend/models"
+	"encoding/json"
 )
 
 type CreateProjectRequest struct {
@@ -13,7 +14,7 @@ type CreateProjectRequest struct {
 
 func (this *Controller) CreateProject() {
 	var request CreateProjectRequest
-	this.ParseForm(&request)
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
 	if request.Name == nil || request.Description == nil || request.CreatorId == nil {
 		this.Ctx.Output.SetStatus(400)

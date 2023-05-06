@@ -4,6 +4,7 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"encoding/base64"
+	"encoding/json"
 	"os"
 	"strconv"
 )
@@ -25,7 +26,7 @@ func (this *Controller) CreateFile() {
 	}
 
 	var request CreateFileRequest
-	err = this.ParseForm(&request)
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 	if request.FileName == nil || request.FileContent == nil {
 		this.Ctx.Output.SetStatus(400)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)

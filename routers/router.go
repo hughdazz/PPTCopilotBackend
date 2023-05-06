@@ -13,7 +13,7 @@ func init() {
 	beego.InsertFilter("*", beego.BeforeRouter, cors_access)
 
 	beego.Router("/", &controllers.MainController{})
-	beego.Router("/init", &controllers.InitController{})
+	beego.Router("/initial", &controllers.InitialController{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",

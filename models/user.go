@@ -7,17 +7,16 @@ import (
 
 // 用户信息
 type User struct {
-	Id       int    `orm:"column(id);pk"`
-	Username string `orm:"size(100);column(username);unique"`
-	Password string `orm:"size(100);column(password);"`
-	Email    string `orm:"size(100);column(email);unique"`
+	Id       int    `orm:"column(id);pk;auto"`
+	Username string `orm:"size(100);unique"`
+	Password string `orm:"size(100);"`
+	Email    string `orm:"size(100);unique"`
 }
 
-func GetAllUsers() []*User {
+func GetAllUsers() []User {
 	o := orm.NewOrm()
-	users := make([]*User, 0)
-	qs := o.QueryTable("user")
-	qs.All(&users)
+	var users []User
+	o.QueryTable("user").All(&users)
 	return users
 }
 
@@ -94,19 +93,8 @@ func VerifyUser(username_or_email string, password string) (User, error) {
 // 新建用户
 func CreateUser(username string, password string, email string) (User, error) {
 	o := orm.NewOrm()
-	user := User{Username: username}
-	err := o.Read(&user, "Username")
-
-	if err == orm.ErrNoRows {
-		user := User{Email: email}
-		err = o.Read(&user, "Email")
-		if err == orm.ErrNoRows {
-			user := User{Username: username, Password: password, Email: email}
-			_, err := o.Insert(&user)
-			return user, err
-		}
-		return user, err
-	}
+	user := User{Username: username, Password: password, Email: email}
+	_, err := o.Insert(&user)
 	return user, err
 }
 

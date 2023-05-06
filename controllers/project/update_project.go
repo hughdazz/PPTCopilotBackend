@@ -3,6 +3,7 @@ package project
 import (
 	"backend/controllers"
 	"backend/models"
+	"encoding/json"
 	"strconv"
 )
 
@@ -13,7 +14,7 @@ type UpdateProjectRequest struct {
 
 func (this *Controller) UpdateProject() {
 	var request UpdateProjectRequest
-	this.ParseForm(&request)
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
 	id_ := this.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(id_)

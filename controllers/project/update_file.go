@@ -4,6 +4,7 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"encoding/base64"
+	"encoding/json"
 	"os"
 	"strconv"
 )
@@ -25,7 +26,7 @@ func (this *Controller) UpdateFile() {
 	file_name := this.Ctx.Input.Param(":file_name")
 
 	var request UpdateFileRequest
-	this.ParseForm(&request)
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
 	if request.FileContent == nil {
 		this.Ctx.Output.SetStatus(400)

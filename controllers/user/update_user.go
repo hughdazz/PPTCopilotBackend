@@ -3,6 +3,7 @@ package user
 import (
 	"backend/controllers"
 	"backend/models"
+	"encoding/json"
 	"strconv"
 )
 
@@ -23,7 +24,7 @@ func (this *Controller) UpdateUser() {
 	}
 
 	var request UpdateUserRequest
-	this.ParseForm(&request)
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 	if request.Username != nil {
 		err = models.UpdateUserUsername(id, *request.Username)
 		if err != nil {

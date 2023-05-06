@@ -3,6 +3,7 @@ package user
 import (
 	"backend/controllers"
 	"backend/models"
+	"encoding/json"
 )
 
 type CreateUserRequest struct {
@@ -13,7 +14,7 @@ type CreateUserRequest struct {
 
 func (this *Controller) CreateUser() {
 	var request CreateUserRequest
-	this.ParseForm(&request)
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 	if request.Username == nil || request.Email == nil || request.Password == nil {
 		this.Ctx.Output.SetStatus(400)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
