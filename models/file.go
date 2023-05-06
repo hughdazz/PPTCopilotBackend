@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -19,7 +20,7 @@ type File struct {
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
 
-func NewFile(name string, project_id int) (File, error) {
+func CreateFile(name string, project_id int) (File, error) {
 	o := orm.NewOrm()
 	var project Project
 	project.Id = project_id
@@ -36,19 +37,20 @@ func NewFile(name string, project_id int) (File, error) {
 	return file, err
 }
 
-func GetFileInProjectByName(file_name string, project_id int) (File, int) {
+func GetFile(file_name string, id int) (File, error) {
 	//找到该项目下的所有file
-	files, err := GetFiles(project_id)
+	files, err := GetFiles(id)
+
 	if err == nil {
 		//遍历所有file，找有无重名
 		for _, file := range files {
 			if file_name == file.Name {
-				return file, 0 //找到
+				return file, nil
 			}
 		}
-		return File{}, 1 //未找到
+		return File{}, errors.New("文件不存在")
 	}
-	return File{}, 2 //查找出错
+	return File{}, err
 }
 
 func GetFiles(id int) ([]File, error) {
@@ -68,7 +70,7 @@ func DeleteDir(project_id int) error {
 }
 
 func DeleteFile(file_name string, project_id int) int {
-	file, res := GetFileInProjectByName(file_name, project_id)
+	file, res := GetFile(file_name, project_id)
 	if res != 0 {
 		// 文件不存在
 		return 1
@@ -104,4 +106,8 @@ func GetFilePathByName(file_name string, project_id int) string {
 
 	filePath := saveDir + "/" + file_name
 	return filePath
+}
+func GetSaveDir(project_id int) string {
+	saveDir := "static/files/" + strconv.Itoa(project_id)
+	return saveDir
 }

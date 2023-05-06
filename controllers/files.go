@@ -88,7 +88,7 @@ func (this *FilesController) Post() {
 		this.ServeJSON()
 		return
 	}
-	err = models.UpdataProject(projectId)
+	err = models.UpdateProject(projectId)
 	this.Ctx.Output.SetStatus(200)
 	file_response.Code = 0
 	file_response.Message = "上传文件成功"
