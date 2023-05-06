@@ -69,16 +69,16 @@ func DeleteDir(project_id int) error {
 	return nil
 }
 
-func DeleteFile(file_name string, project_id int) int {
-	file, res := GetFile(file_name, project_id)
-	if res != 0 {
+func DeleteFile(file_name string, project_id int) error {
+	file, err := GetFile(file_name, project_id)
+	if err != nil {
 		// 文件不存在
-		return 1
+		return err
 	}
 	o := orm.NewOrm()
-	_, err := o.Delete(&file)
+	_, err = o.Delete(&file)
 	if err != nil {
-		return 2 //文件结构删除错误
+		return err //文件结构删除错误
 	}
 
 	path := GetFilePathByName(file_name, project_id)
@@ -86,9 +86,9 @@ func DeleteFile(file_name string, project_id int) int {
 
 	if err != nil {
 		//文件删除错误
-		return 3
+		return err
 	}
-	return 0
+	return nil
 }
 
 func DeleteFileByPath(path string) error {

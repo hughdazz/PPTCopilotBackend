@@ -26,13 +26,6 @@ func (this *Controller) CreateFile() {
 
 	var request CreateFileRequest
 	err = this.ParseForm(&request)
-	if err != nil {
-		this.Ctx.Output.SetStatus(400)
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-
 	if request.FileName == nil || request.FileContent == nil {
 		this.Ctx.Output.SetStatus(400)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
