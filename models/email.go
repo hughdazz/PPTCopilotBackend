@@ -82,7 +82,6 @@ func SendEmail(email string, verificationCode string) error {
 	from := conf.GetFrom()
 
 	config := fmt.Sprintf(`{"username":"%s","password":"%s","host":"%s","port":%d}`, username, password, host, port)
-	// config := `{"username":"1621605907@qq.com","password":"Df27011236","host":"smtp.qq.com","port":587}`
 
 	verifyemail := utils.NewEMail(config)
 
