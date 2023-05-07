@@ -23,6 +23,7 @@ func (this *InitialController) Get() {
 	models.CreateUser("admin", "123456", "admin@163.com")
 	models.CreateUser("jack", "123456", "jack@qq.com")
 	models.CreateUser("tom", "123456", "tom@gmail.com")
+	models.CreateUser("lucy", "123456", "2052150@tongji.edu.cn")
 
 	this.Ctx.Output.SetStatus(200)
 	this.Data["json"] = MakeResponse(OK, "success", nil)
