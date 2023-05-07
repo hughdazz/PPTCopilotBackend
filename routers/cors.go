@@ -13,37 +13,14 @@ func cors_access(context *context.Context) {
 	// OPTIONS请求直接返回
 	if context.Request.Method == "OPTIONS" {
 		context.ResponseWriter.WriteHeader(200)
-		// 设置跨域
 		return
 	}
-	// if context.Request.RequestURI != "user/login" && context.Request.RequestURI != "/register" {
-	// 	cookie, err := context.Request.Cookie("token")
-
-	// 	if err != nil {
-	// 		//进入/projects和/logout必须要有token和cookie
-	// 		if context.Request.RequestURI == "/projects" || context.Request.RequestURI == "/logout" {
-	// 			context.ResponseWriter.Write([]byte("请先登录"))
-	// 			context.Redirect(302, "/login")
-	// 		} else if context.Request.Method != "GET" {
-	// 			//其他页面有:project_id可以看，但不能改动
-	// 			user_id := models.CheckToken(cookie.Value)
-	// 			//路由中包含project_id
-	// 			if strings.Index(context.Request.RequestURI, "/projects/") >= 0 {
-	// 				projectIdStr := context.Input.Param(":project_id")
-	// 				projectId, _ := strconv.Atoi(projectIdStr)
-	// 				//根据project_id找见项目
-	// 				project, pro_err := models.GetProject(projectId)
-	// 				//路由错误
-	// 				if pro_err != nil {
-	// 					context.ResponseWriter.Write([]byte("路由错误"))
-	// 					context.Redirect(404, "/login")
-	// 				} else if project.Creator.Id != user_id {
-	// 					context.ResponseWriter.Write([]byte("您无权操作，请先登录"))
-	// 					context.Redirect(302, "/login")
-	// 				}
-	// 			}
-
-	// 		}
-	// 	}
-	// }
+	if context.Request.RequestURI == "/user/login" || context.Request.RequestURI == "/user/logout" {
+		return
+	}
+	_, err := context.Request.Cookie("token")
+	if err != nil {
+		context.ResponseWriter.WriteHeader(401)
+		return
+	}
 }
