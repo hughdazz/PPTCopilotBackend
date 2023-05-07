@@ -50,26 +50,4 @@ func init() {
 	)
 	beego.AddNamespace(emailController)
 
-	// beego.Router("/login", &controllers.LoginController{})
-	// beego.Router("/register", &controllers.RegisterController{})
-	// beego.Router("/logout", &controllers.LogoutController{})
-	// beego.Router("/projects", &controllers.ProjectsController{})
-	// beego.Router("/projects/:project_id", &controllers.ProjectController{})
-	// beego.Router("/projects/:project_id/files", &controllers.FilesController{})
-	// beego.Router("/projects/:project_id/files/:file_name", &controllers.FileController{})
-	// beego.Router("/search_project?:filter_words", &controllers.SearchController{})
-	// beego.Router("/resetpassword", &controllers.ResetPasswordController{})
-	// beego.Router("/sendverifyemail", &controllers.ForgetPasswdController{}, "post:SendVerificationEmail")
-	// beego.Router("/checkverifyemail", &controllers.ForgetPasswdController{}, "post:CheckVerificationEmail")
-	// beego.Router("/checklogin", &controllers.CheckLoginController{})
-
-	// gptService := beego.NewNamespace("/gpt",
-	// 	beego.NSRouter("/set_api_key", &controllers.GptController{}, "post:SetApiKey"),
-	// 	beego.NSRouter("/is_api_key_set", &controllers.GptController{}, "get:IsApiKeySet"),
-	// 	beego.NSRouter("/get_catalog", &controllers.GptController{}, "post:GetCatalog"),
-	// 	beego.NSRouter("/update_slides", &controllers.GptController{}, "post:UpdateSides"),
-	// 	beego.NSRouter("/chat", &controllers.GptController{}, "post:Chat"),
-	// )
-	// beego.AddNamespace(gptService)
-
 }

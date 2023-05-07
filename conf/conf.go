@@ -30,11 +30,11 @@ func init() {
 		panic("Failed to read gpt config file: " + err.Error())
 	}
 
-	// emailcfg, err := ini.Load("./conf/emailverify.conf")
+	emailcfg, err := ini.Load("./conf/emailverify.conf")
 
-	// if err != nil {
-	// 	panic("Failed to read email config file: " + err.Error())
-	// }
+	if err != nil {
+		panic("Failed to read email config file: " + err.Error())
+	}
 
 	// 读取配置项
 	GptConfigInstance = GptConfig{
@@ -47,14 +47,14 @@ func init() {
 		UpdateSinglePromptTemplate: cfg.Section("").Key("single_page_prompt_template").String(),
 	}
 
-	// EmailVerifyConfigInstance = EmailVerifyConfig{
-	// 	mailer:   emailcfg.Section("").Key("mailer").String(),
-	// 	host:     emailcfg.Section("").Key("host").String(),
-	// 	port:     emailcfg.Section("").Key("port").MustInt(),
-	// 	username: emailcfg.Section("").Key("username").String(),
-	// 	password: emailcfg.Section("").Key("password").String(),
-	// 	from:     emailcfg.Section("").Key("from").String(),
-	// }
+	EmailVerifyConfigInstance = EmailVerifyConfig{
+		mailer:   emailcfg.Section("").Key("mailer").String(),
+		host:     emailcfg.Section("").Key("host").String(),
+		port:     emailcfg.Section("").Key("port").MustInt(),
+		username: emailcfg.Section("").Key("username").String(),
+		password: emailcfg.Section("").Key("password").String(),
+		from:     emailcfg.Section("").Key("from").String(),
+	}
 }
 
 func GetGptApiUrl() string {
