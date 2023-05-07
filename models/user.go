@@ -7,10 +7,67 @@ import (
 
 // 用户信息
 type User struct {
-	Id       int
-	Username string `orm:"size(100)"`
-	Password string `orm:"size(100)"`
-	Email    string `orm:"size(100)"`
+	Id       int    `orm:"column(id);pk;auto"`
+	Username string `orm:"size(100);unique"`
+	Password string `orm:"size(100);"`
+	Email    string `orm:"size(100);unique"`
+}
+
+func GetAllUsers() []User {
+	o := orm.NewOrm()
+	var users []User
+	o.QueryTable("user").All(&users)
+	return users
+}
+
+func UpdateUserUsername(id int, username string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Username = username
+	_, err = o.Update(&user, "Username")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func UpdateUserPassword(id int, password string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Password = password
+	_, err = o.Update(&user, "Password")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func UpdateUserEmail(id int, email string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Email = email
+	_, err = o.Update(&user, "Email")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteUser(id int) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	_, err := o.Delete(&user)
+	return err
 }
 
 // 验证用户信息
@@ -34,22 +91,11 @@ func VerifyUser(username_or_email string, password string) (User, error) {
 }
 
 // 新建用户
-func CreateUser(username string, password string, email string) (User, error, int) {
+func CreateUser(username string, password string, email string) (User, error) {
 	o := orm.NewOrm()
-	user := User{Username: username}
-	err := o.Read(&user, "Username")
-
-	if err == orm.ErrNoRows {
-		user := User{Email: email}
-		err = o.Read(&user, "Email")
-		if err == orm.ErrNoRows {
-			user := User{Username: username, Password: password, Email: email}
-			_, err := o.Insert(&user)
-			return user, err, 0
-		}
-		return user, err, 1
-	}
-	return user, err, 2
+	user := User{Username: username, Password: password, Email: email}
+	_, err := o.Insert(&user)
+	return user, err
 }
 
 // 获取用户

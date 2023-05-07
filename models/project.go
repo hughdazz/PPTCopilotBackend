@@ -17,7 +17,7 @@ type Project struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
-func NewProject(name string, description string, creator_id int) (Project, error) {
+func CreateProject(name string, description string, creator_id int) (Project, error) {
 	o := orm.NewOrm()
 	var creator User
 	creator.Id = creator_id
@@ -34,16 +34,28 @@ func NewProject(name string, description string, creator_id int) (Project, error
 	return project, err
 }
 
-func UpdataProject(id int) error {
+func UpdateProjectName(id int, name string) (Project, error) {
 	o := orm.NewOrm()
 	project := Project{Id: id}
-	if err := o.Read(&project); err != nil {
-		return err
+	err := o.Read(&project)
+	if err == nil {
+		project.Name = name
+		_, err := o.Update(&project)
+		return project, err
 	}
-	if _, err := o.Update(&project); err != nil {
-		return err
+	return project, err
+}
+
+func UpdateProjectDescription(id int, description string) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Description = description
+		_, err := o.Update(&project)
+		return project, err
 	}
-	return nil
+	return project, err
 }
 
 func GetProject(id int) (Project, error) {
@@ -58,6 +70,13 @@ func GetProjects(id int) ([]Project, error) {
 	var projects []Project
 	_, err := o.QueryTable("project").Filter("creator_id", id).All(&projects)
 	return projects, err
+}
+
+func GetAllProjects() []Project {
+	o := orm.NewOrm()
+	var projects []Project
+	o.QueryTable("project").All(&projects)
+	return projects
 }
 
 func DeleteProject(id int) error {
