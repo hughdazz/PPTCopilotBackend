@@ -17,6 +17,22 @@ type Project struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
+func RefactProjects(projects []Project) []Project {
+	for i, project := range projects {
+		creator_temp, _ := GetUser(project.Creator.Id)
+		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+		projects[i] = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+	}
+	return projects
+}
+
+func RefactProject(project Project) Project {
+	creator_temp, _ := GetUser(project.Creator.Id)
+	creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+	project = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+	return project
+}
+
 func CreateProject(name string, description string, creator_id int) (Project, error) {
 	o := orm.NewOrm()
 	var creator User
