@@ -37,3 +37,13 @@ func CheckToken(tokenString string) int {
 	user_id := int(claims["user_id"].(float64))
 	return user_id
 }
+
+func GetUserId(tokenString string) int {
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		token_secrets, _ := beego.AppConfig.String("TokenSecrets")
+		return []byte(token_secrets), nil
+	})
+	claims, _ := token.Claims.(jwt.MapClaims)
+	user_id := int(claims["user_id"].(float64))
+	return user_id
+}
