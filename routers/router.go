@@ -16,7 +16,6 @@ func init() {
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/initial", &controllers.InitialController{})
-	// beego.Router("/search?:filter_words", &controllers.SearchController{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",
