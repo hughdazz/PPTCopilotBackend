@@ -3,13 +3,9 @@ package project
 import (
 	"backend/controllers"
 	"backend/models"
-	"encoding/json"
+	"os"
 	"strconv"
 )
-
-type CreateFileRequest struct {
-	FileName *string `json:"file_name"`
-}
 
 func (this *Controller) CreateFile() {
 	id_ := this.Ctx.Input.Param(":id")
@@ -21,23 +17,18 @@ func (this *Controller) CreateFile() {
 		return
 	}
 
-	var request CreateFileRequest
-	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
-	if request.FileName == nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-
-	file, err := models.CreateFile(*request.FileName, id)
+	save_dir := models.GetSaveDir(id)
+	// 递归创建目录
+	err = os.MkdirAll(save_dir, 0777)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
+	file_path := save_dir + "/" + this.GetString("savename")
 
-	save_dir := models.GetSaveDir(id)
-	file_path := save_dir + "/" + file.Name
+	// 保存到数据库
+	file, err := models.CreateFile(this.GetString("savename"), id)
 
 	// 将form-data中的文件保存到本地
 	err = this.SaveToFile("uploadname", file_path)
