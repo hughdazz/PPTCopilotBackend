@@ -1,16 +1,21 @@
 package models
 
 import (
+	"time"
+
 	"github.com/beego/beego/v2/client/orm"
 	_ "github.com/go-sql-driver/mysql" // import your used driver
 )
 
 // 用户信息
 type User struct {
-	Id       int    `orm:"column(id);pk;auto"`
-	Username string `orm:"size(100);unique"`
-	Password string `orm:"size(100);"`
-	Email    string `orm:"size(100);unique"`
+	Id          int       `orm:"column(id);pk;auto"`
+	Username    string    `orm:"size(100);unique"`
+	Password    string    `orm:"size(100);"`
+	Email       string    `orm:"size(100);unique"`
+	Description string    `orm:"size(100);"`
+	Created     time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func GetAllUsers() []User {
@@ -62,7 +67,20 @@ func UpdateUserEmail(id int, email string) error {
 	}
 	return nil
 }
-
+func UpdateUserDescription(id int, description string) error {
+	o := orm.NewOrm()
+	user := User{Id: id}
+	err := o.Read(&user)
+	if err != nil {
+		return err
+	}
+	user.Description = description
+	_, err = o.Update(&user, "Description")
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func DeleteUser(id int) error {
 	o := orm.NewOrm()
 	user := User{Id: id}

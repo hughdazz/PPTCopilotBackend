@@ -16,13 +16,12 @@ func (this *Controller) SearchProject() {
 	projects, err := models.SearchProjects(keywords)
 
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
+
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "获取项目列表失败", nil)
 		this.ServeJSON()
 		return
 	}
 
-	this.Ctx.Output.SetStatus(200)
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "获取项目列表成功", projects)
 	this.ServeJSON()
 

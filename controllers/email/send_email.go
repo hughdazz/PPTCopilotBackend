@@ -19,7 +19,6 @@ func (this *Controller) SendEmail() {
 
 	_, err := models.GetUserByEmail(email)
 	if err != nil {
-		this.Ctx.Output.SetStatus(400)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "邮箱不存在", email)
 		this.ServeJSON()
 		return
@@ -32,7 +31,6 @@ func (this *Controller) SendEmail() {
 
 	err = models.SetCodeCache(email, verificationCode)
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "验证码缓存失败", nil)
 		this.ServeJSON()
 		return
@@ -42,7 +40,6 @@ func (this *Controller) SendEmail() {
 	err = models.SendEmail(email, verificationCode)
 
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "邮件发送失败", email)
 		this.ServeJSON()
 		return

@@ -8,11 +8,11 @@ import (
 	"strconv"
 )
 
-func (this *Controller) GetFile() {
+func (this *Controller) GetFile_() {
 	id_ := this.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(id_)
 	if err != nil {
-		this.Ctx.Output.SetStatus(400)
+
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
 		this.ServeJSON()
 		return
@@ -22,7 +22,6 @@ func (this *Controller) GetFile() {
 	file, err := models.GetFile(file_name, id)
 
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
@@ -32,14 +31,13 @@ func (this *Controller) GetFile() {
 	path := models.GetFilePathByName(file.Name, id)
 	file_content, err := ioutil.ReadFile(path)
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
 	encoded_content := base64.StdEncoding.EncodeToString(file_content)
-	this.Ctx.Output.SetStatus(200)
+
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", encoded_content)
 	this.ServeJSON()
 }
