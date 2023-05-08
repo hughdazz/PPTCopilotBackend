@@ -35,6 +35,7 @@ func RequestGpt(prompt string) (string, error) {
 	body.Temperature = 0.7
 
 	req_url := conf.GetGptApiUrl()
+	req.SetProxyUrl("http://host.docker.internal:7890")
 	// 进行http请求
 	resp, err := req.Post(req_url, req.BodyJSON(&body), req.Header(map[string]string{
 		"Authorization": "Bearer " + apikey,
