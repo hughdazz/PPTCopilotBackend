@@ -16,7 +16,6 @@ func init() {
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/initial", &controllers.InitialController{})
-	// beego.Router("/search?:filter_words", &controllers.SearchController{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",
@@ -33,7 +32,7 @@ func init() {
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;put:UpdateProject;delete:DeleteProject"),
 		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
 		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;put:UpdateFile;delete:DeleteFile"),
-		beego.NSRouter("/search?:filter_words", &project.Controller{}, "get:SearchProject"),
+		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
 	)
 	beego.AddNamespace(projectController)
 
