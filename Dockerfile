@@ -9,6 +9,7 @@ WORKDIR /home/app
 # 预先复制/缓存go.mod以预先下载依赖项，并且仅在后续构建中重新下载它们（如果它们发生变化）
 COPY go.mod go.sum ./
 # 下载bee工具以及依赖
+RUN go env -w GO111MODULE=on && go env -w GOPROXY=https://goproxy.cn
 RUN go install github.com/beego/bee/v2@latest && go mod download && go mod verify
 
 COPY . .
