@@ -43,8 +43,7 @@ func init() {
 		beego.NSRouter("gen_outline", &gpt.Controller{}, "post:GenOutline"),
 		beego.NSRouter("update_slide", &gpt.Controller{}, "post:UpdateSlide"),
 		beego.NSRouter("guide_slide", &gpt.Controller{}, "post:GuideSlide"),
-		// beego.NSRouter("update_outline", &gpt.Controller{}, "post:UpdateOutline"),
-		// beego.NSRouter("get_outline", &gpt.Controller{}, "post:GetOutline"),
+		beego.NSRouter("/outline/:id", &gpt.Controller{}, "get:GetOutline;post:UpdateOutline"),
 	)
 	beego.AddNamespace(gptController)
 
