@@ -5,8 +5,9 @@ import (
 )
 
 func cors_access(context *context.Context) {
-	// 9529+7777
-	context.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "http://localhost:7777;http://localhost:9529")
+	// 本地9529+7777端口
+	context.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "http://localhost:9529")
+	context.ResponseWriter.Header().Set("Access-Control-Allow-Origin", "http://localhost:7777")
 	context.ResponseWriter.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	context.ResponseWriter.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, token")
 	context.ResponseWriter.Header().Set("Access-Control-Allow-Credentials", "true")
