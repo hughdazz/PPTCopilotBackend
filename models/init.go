@@ -7,6 +7,7 @@ func init() {
 	// 设置默认数据库
 	orm.RegisterDataBase("default", "mysql", "root:admin@tcp(host.docker.internal:3307)/now_db?charset=utf8&loc=Local")
 	// 注册定义的model
+	orm.RegisterModel(new(Outline))
 	orm.RegisterModel(new(User))
 	orm.RegisterModel(new(Project))
 	orm.RegisterModel(new(File))
