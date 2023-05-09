@@ -13,7 +13,10 @@ func (this *Controller) SearchProject() {
 	keywords := strings.Split(filterWords, " ")
 
 	// 查询项目
-	projects, err := models.SearchProjects(keywords)
+	projects_temp, err := models.SearchProjects(keywords)
+
+	// 重新组装项目
+	projects := models.RefactProjects(projects_temp)
 
 	if err != nil {
 
