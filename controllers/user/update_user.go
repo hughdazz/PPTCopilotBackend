@@ -8,16 +8,17 @@ import (
 )
 
 type UpdateUserRequest struct {
-	Username *string `json:"username"`
-	Email    *string `json:"email"`
-	Password *string `json:"password"`
+	Username    *string `json:"username"`
+	Email       *string `json:"email"`
+	Password    *string `json:"password"`
+	Description *string `json:"description"`
 }
 
 func (this *Controller) UpdateUser() {
 	id_ := this.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(id_)
 	if err != nil {
-		this.Ctx.Output.SetStatus(401)
+
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
@@ -28,7 +29,7 @@ func (this *Controller) UpdateUser() {
 	if request.Username != nil {
 		err = models.UpdateUserUsername(id, *request.Username)
 		if err != nil {
-			this.Ctx.Output.SetStatus(401)
+
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 			this.ServeJSON()
 			return
@@ -37,7 +38,7 @@ func (this *Controller) UpdateUser() {
 	if request.Email != nil {
 		err = models.UpdateUserEmail(id, *request.Email)
 		if err != nil {
-			this.Ctx.Output.SetStatus(401)
+
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 			this.ServeJSON()
 			return
@@ -46,14 +47,23 @@ func (this *Controller) UpdateUser() {
 	if request.Password != nil {
 		err = models.UpdateUserPassword(id, *request.Password)
 		if err != nil {
-			this.Ctx.Output.SetStatus(401)
+
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 			this.ServeJSON()
 			return
 		}
 	}
 
-	this.Ctx.Output.SetStatus(200)
+	if request.Description != nil {
+		err = models.UpdateUserDescription(id, *request.Description)
+		if err != nil {
+
+			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+			this.ServeJSON()
+			return
+		}
+	}
+
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", nil)
 	this.ServeJSON()
 }

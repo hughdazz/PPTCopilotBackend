@@ -21,6 +21,8 @@ func init() {
 	userController := beego.NewNamespace("/user",
 		beego.NSRouter("/", &user.Controller{}, "get:GetAll;post:CreateUser"),
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
+		beego.NSRouter("/:id/avatar", &user.Controller{}, "post:UploadAvatar"),
+
 		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
 	)
@@ -51,4 +53,5 @@ func init() {
 	)
 	beego.AddNamespace(emailController)
 
+	beego.Router("/static/*", &controllers.StaticRouter{})
 }

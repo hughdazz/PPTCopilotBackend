@@ -15,7 +15,7 @@ func cors_access(context *context.Context) {
 		context.ResponseWriter.WriteHeader(200)
 		return
 	}
-	if context.Request.RequestURI == "/user/login" || context.Request.RequestURI == "/user/logout" {
+	if context.Request.RequestURI == "/user/login" || context.Request.RequestURI == "/initial" {
 		return
 	}
 	_, err := context.Request.Cookie("token")

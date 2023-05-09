@@ -31,7 +31,6 @@ func (this *InitialController) Get() {
 	// 初始化File
 	models.CreateFile("cover.png", 1)
 
-	this.Ctx.Output.SetStatus(200)
 	this.Data["json"] = MakeResponse(OK, "success", nil)
 	this.ServeJSON()
 }

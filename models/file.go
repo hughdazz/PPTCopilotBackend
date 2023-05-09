@@ -113,6 +113,6 @@ func GetFilePathByName(file_name string, project_id int) string {
 	return filePath
 }
 func GetSaveDir(project_id int) string {
-	saveDir := "static/files/" + strconv.Itoa(project_id)
+	saveDir := "static/project/" + strconv.Itoa(project_id)
 	return saveDir
 }

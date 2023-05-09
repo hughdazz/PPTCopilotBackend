@@ -22,13 +22,11 @@ func (this *Controller) UpdateSlide() {
 
 	updated_slide, err := RequestGpt(template)
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	this.Ctx.Output.SetStatus(200)
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", updated_slide)
 	this.ServeJSON()
 }
