@@ -15,6 +15,11 @@ func cors_access(context *context.Context) {
 		context.ResponseWriter.WriteHeader(200)
 		return
 	}
+	// 如果访问static目录下文件，直接返回
+	if context.Request.RequestURI[:7] == "/static" {
+		return
+	}
+
 	if context.Request.RequestURI == "/user/login" || context.Request.RequestURI == "/initial" {
 		return
 	}
