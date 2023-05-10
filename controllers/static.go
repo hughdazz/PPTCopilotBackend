@@ -13,6 +13,7 @@ type StaticRouter struct {
 
 func (c *StaticRouter) Get() {
 	url := c.Ctx.Request.URL.Path
+	// static/user/:id/avatar.png
 	if strings.Contains(url, "user/") && strings.Contains(url, "avatar.png") {
 		http.ServeFile(c.Ctx.ResponseWriter, c.Ctx.Request, "static/user/default.png")
 		return
