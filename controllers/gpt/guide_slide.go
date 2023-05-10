@@ -20,13 +20,12 @@ func (this *Controller) GuideSlide() {
 
 	guide_slide, err := RequestGpt(template)
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	this.Ctx.Output.SetStatus(200)
+	guide_slide = strings.ReplaceAll(guide_slide, "\n", "")
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", guide_slide)
 	this.ServeJSON()
 

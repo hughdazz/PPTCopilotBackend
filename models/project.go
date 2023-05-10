@@ -9,12 +9,31 @@ import (
 )
 
 type Project struct {
-	Id          int
+	Id          int       `orm:"auto;pk"`
 	Name        string    `orm:"size(100)"`
 	Description string    `orm:"size(100)"`
 	Creator     *User     `orm:"rel(fk)"` // 设置一对多的反向关系
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
+}
+
+func RefactProjects(projects []Project) []Project {
+	for i, project := range projects {
+		creator_temp, _ := GetUser(project.Creator.Id)
+		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+		// projects[i] = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+		projects[i].Name = project.Name
+		projects[i].Description = project.Description
+		projects[i].Creator = &creator
+	}
+	return projects
+}
+
+func RefactProject(project Project) Project {
+	creator_temp, _ := GetUser(project.Creator.Id)
+	creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+	project = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+	return project
 }
 
 func CreateProject(name string, description string, creator_id int) (Project, error) {
@@ -60,8 +79,9 @@ func UpdateProjectDescription(id int, description string) (Project, error) {
 
 func GetProject(id int) (Project, error) {
 	o := orm.NewOrm()
-	project := Project{Id: id}
-	err := o.Read(&project)
+	// 查找，使用
+	var project Project
+	err := o.QueryTable("project").Filter("id", id).One(&project)
 	return project, err
 }
 

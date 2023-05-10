@@ -3,6 +3,7 @@ package gpt
 import (
 	"backend/conf"
 	"backend/controllers"
+	"backend/models"
 	"encoding/json"
 	"strings"
 )
@@ -20,15 +21,24 @@ func (this *Controller) GenOutline() {
 	prompt = strings.ReplaceAll(prompt, "{{topic}}", request.Topic)
 	prompt = strings.ReplaceAll(prompt, "{{sponsor}}", request.Sponsor)
 
-	outline, err := RequestGpt(prompt)
+	outline_str, err := RequestGpt(prompt)
 	if err != nil {
-		this.Ctx.Output.SetStatus(500)
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline_str)
 		this.ServeJSON()
 		return
 	}
 
-	this.Ctx.Output.SetStatus(200)
+	// 替换换行符
+	outline_str = strings.ReplaceAll(outline_str, "\n", "")
+	outline_str = strings.ReplaceAll(outline_str, "\\\n", "")
+
+	outline, err := models.CreateOutline(outline_str)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline)
+		this.ServeJSON()
+		return
+	}
+
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", outline)
 	this.ServeJSON()
 }

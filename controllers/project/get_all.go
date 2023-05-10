@@ -6,7 +6,9 @@ import (
 )
 
 func (this *Controller) GetAll() {
-	this.Ctx.Output.SetStatus(200)
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", models.GetAllProjects())
+
+	projects := models.GetAllProjects()
+
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", models.RefactProjects(projects))
 	this.ServeJSON()
 }

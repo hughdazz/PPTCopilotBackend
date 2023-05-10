@@ -20,23 +20,6 @@ type File struct {
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
 
-func CreateFile(name string, project_id int) (File, error) {
-	o := orm.NewOrm()
-	var project Project
-	project.Id = project_id
-	// 根据id获取项目信息
-	err := o.Read(&project)
-	if err != nil {
-		// 项目不存在
-		return File{}, err
-	}
-
-	file := File{Name: name, Project: &project}
-	// 创建文件结构
-	_, err = o.Insert(&file)
-	return file, err
-}
-
 func GetFile(file_name string, id int) (File, error) {
 	//找到该项目下的所有file
 	files, err := GetFiles(id)
@@ -58,6 +41,28 @@ func GetFiles(id int) ([]File, error) {
 	var files []File
 	_, err := o.QueryTable("file").Filter("project_id", id).All(&files)
 	return files, err
+}
+
+func CreateFile(name string, project_id int) (File, error) {
+	o := orm.NewOrm()
+	var project Project
+	project.Id = project_id
+	// 根据id获取项目信息
+	err := o.Read(&project)
+	if err != nil {
+		// 项目不存在
+		return File{}, err
+	}
+
+	_file, err := GetFile(name, project_id)
+	if _file.Name == name {
+		return File{}, errors.New("文件已存在")
+	}
+
+	file := File{Name: name, Project: &project}
+	// 创建文件结构
+	_, err = o.Insert(&file)
+	return file, err
 }
 
 func DeleteDir(project_id int) error {
@@ -108,6 +113,6 @@ func GetFilePathByName(file_name string, project_id int) string {
 	return filePath
 }
 func GetSaveDir(project_id int) string {
-	saveDir := "static/files/" + strconv.Itoa(project_id)
+	saveDir := "static/project/" + strconv.Itoa(project_id)
 	return saveDir
 }

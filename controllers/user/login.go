@@ -16,7 +16,7 @@ func (this *Controller) Login() {
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
 	if request.Username_or_email == nil || request.Password == nil {
-		this.Ctx.Output.SetStatus(400)
+
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
 		this.ServeJSON()
 		return
@@ -24,7 +24,7 @@ func (this *Controller) Login() {
 
 	user, err := models.VerifyUser(*request.Username_or_email, *request.Password)
 	if err != nil {
-		this.Ctx.Output.SetStatus(401)
+
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
@@ -34,7 +34,9 @@ func (this *Controller) Login() {
 	// 设置在响应头中
 	this.Ctx.SetCookie("token", tokenString, "3600", "/")
 
-	this.Ctx.Output.SetStatus(200)
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", user)
+	this.Data["json"] = map[string]interface{}{
+		"code":    controllers.OK,
+		"message": "success",
+		"token":   tokenString, "data": user}
 	this.ServeJSON()
 }

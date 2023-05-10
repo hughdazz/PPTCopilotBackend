@@ -16,11 +16,14 @@ func init() {
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/initial", &controllers.InitialController{})
+	beego.Router("/static/*", &controllers.StaticRouter{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",
 		beego.NSRouter("/", &user.Controller{}, "get:GetAll;post:CreateUser"),
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
+		beego.NSRouter("/:id/avatar", &user.Controller{}, "post:UploadAvatar"),
+
 		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
 	)
@@ -31,7 +34,8 @@ func init() {
 		beego.NSRouter("/", &project.Controller{}, "get:GetAll;post:CreateProject"),
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;put:UpdateProject;delete:DeleteProject"),
 		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
-		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;put:UpdateFile;delete:DeleteFile"),
+		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
+		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
 	)
 	beego.AddNamespace(projectController)
 
@@ -40,6 +44,7 @@ func init() {
 		beego.NSRouter("gen_outline", &gpt.Controller{}, "post:GenOutline"),
 		beego.NSRouter("update_slide", &gpt.Controller{}, "post:UpdateSlide"),
 		beego.NSRouter("guide_slide", &gpt.Controller{}, "post:GuideSlide"),
+		beego.NSRouter("/outline/:id", &gpt.Controller{}, "get:GetOutline;post:UpdateOutline"),
 	)
 	beego.AddNamespace(gptController)
 

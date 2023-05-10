@@ -19,14 +19,12 @@ func (this *Controller) VerifyEmail() {
 	verifycode, err := models.GetVerifyCode(email)
 
 	if err != nil {
-		this.Ctx.Output.SetStatus(400)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "验证码获取失败", nil)
 		this.ServeJSON()
 		return
 	}
 
 	if code != verifycode {
-		this.Ctx.Output.SetStatus(400)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "验证码错误", verifycode)
 		this.ServeJSON()
 		return
