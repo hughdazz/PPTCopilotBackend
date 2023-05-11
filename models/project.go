@@ -13,8 +13,16 @@ type Project struct {
 	Name        string    `orm:"size(100)"`
 	Description string    `orm:"size(100)"`
 	Creator     *User     `orm:"rel(fk)"` // 设置一对多的反向关系
+	Star        int       `orm:"default(0)"`
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
+}
+
+type Favorite struct {
+	Id      int       `orm:"auto;pk"`
+	User    *User     `orm:"rel(fk)"` // 设置一对多的反向关系
+	Project *Project  `orm:"rel(fk)"` // 设置一对多的反向关系
+	Created time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
 func RefactProjects(projects []Project) []Project {
@@ -72,6 +80,18 @@ func UpdateProjectDescription(id int, description string) (Project, error) {
 	err := o.Read(&project)
 	if err == nil {
 		project.Description = description
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
+}
+
+func IncProjectStar(id int) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Star = project.Star + 1
 		_, err := o.Update(&project)
 		return project, err
 	}
@@ -138,4 +158,16 @@ func SearchProjects(keywords []string) ([]Project, error) {
 	}
 
 	return projects, nil
+}
+
+func LikeProject(user_id int, project_id int) (Favorite, error) {
+	o := orm.NewOrm()
+	var user User
+	user.Id = user_id
+	var project Project
+	project.Id = project_id
+	favorite := Favorite{User: &user, Project: &project}
+	_, err := o.Insert(&favorite)
+	IncProjectStar(project_id)
+	return favorite, err
 }
