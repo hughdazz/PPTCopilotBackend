@@ -29,6 +29,11 @@ func (this *Controller) CreateFile() {
 
 	// 保存到数据库
 	file, err := models.CreateFile(this.GetString("savename"), id)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.ServeJSON()
+		return
+	}
 
 	// 将form-data中的文件保存到本地
 	err = this.SaveToFile("uploadname", file_path)

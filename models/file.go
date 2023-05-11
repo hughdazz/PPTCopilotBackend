@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -107,7 +108,7 @@ func DeleteFileByPath(path string) error {
 
 func GetFilePathByName(file_name string, project_id int) string {
 
-	saveDir := "static/files/" + strconv.Itoa(project_id)
+	saveDir := "static/project/" + strconv.Itoa(project_id)
 
 	filePath := saveDir + "/" + file_name
 	return filePath
@@ -115,4 +116,21 @@ func GetFilePathByName(file_name string, project_id int) string {
 func GetSaveDir(project_id int) string {
 	saveDir := "static/project/" + strconv.Itoa(project_id)
 	return saveDir
+}
+
+func CopyFile(srcFile, dstFile string) error {
+	src, err := os.Open(srcFile)
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	dst, err := os.Create(dstFile)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, src)
+	return err
 }
