@@ -23,6 +23,7 @@ func init() {
 		beego.NSRouter("/", &user.Controller{}, "get:GetAll;post:CreateUser"),
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
 		beego.NSRouter("/:id/avatar", &user.Controller{}, "post:UploadAvatar"),
+		beego.NSRouter("/:id/project", &user.Controller{}, "get:GetProjects"),
 
 		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
