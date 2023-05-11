@@ -34,6 +34,9 @@ func (this *Controller) Login() {
 	// 设置在响应头中
 	this.Ctx.SetCookie("token", tokenString, "3600", "/")
 
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", user)
+	this.Data["json"] = map[string]interface{}{
+		"code":    controllers.OK,
+		"message": "success",
+		"token":   tokenString, "data": user}
 	this.ServeJSON()
 }

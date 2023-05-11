@@ -28,6 +28,10 @@ func (this *Controller) GenOutline() {
 		return
 	}
 
+	// 替换换行符
+	outline_str = strings.ReplaceAll(outline_str, "\n", "")
+	outline_str = strings.ReplaceAll(outline_str, "\\\n", "")
+
 	outline, err := models.CreateOutline(outline_str)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline)

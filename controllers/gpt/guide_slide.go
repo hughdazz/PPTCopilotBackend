@@ -25,6 +25,7 @@ func (this *Controller) GuideSlide() {
 		return
 	}
 
+	guide_slide = strings.ReplaceAll(guide_slide, "\n", "")
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", guide_slide)
 	this.ServeJSON()
 

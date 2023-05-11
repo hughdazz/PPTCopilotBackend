@@ -16,6 +16,7 @@ func init() {
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/initial", &controllers.InitialController{})
+	beego.Router("/static/*", &controllers.StaticRouter{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",
@@ -54,5 +55,4 @@ func init() {
 	)
 	beego.AddNamespace(emailController)
 
-	beego.Router("/static/*", &controllers.StaticRouter{})
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type Project struct {
-	Id          int
+	Id          int       `orm:"auto;pk"`
 	Name        string    `orm:"size(100)"`
 	Description string    `orm:"size(100)"`
 	Creator     *User     `orm:"rel(fk)"` // 设置一对多的反向关系
@@ -21,7 +21,10 @@ func RefactProjects(projects []Project) []Project {
 	for i, project := range projects {
 		creator_temp, _ := GetUser(project.Creator.Id)
 		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
-		projects[i] = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+		// projects[i] = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+		projects[i].Name = project.Name
+		projects[i].Description = project.Description
+		projects[i].Creator = &creator
 	}
 	return projects
 }
@@ -76,8 +79,9 @@ func UpdateProjectDescription(id int, description string) (Project, error) {
 
 func GetProject(id int) (Project, error) {
 	o := orm.NewOrm()
-	project := Project{Id: id}
-	err := o.Read(&project)
+	// 查找，使用
+	var project Project
+	err := o.QueryTable("project").Filter("id", id).One(&project)
 	return project, err
 }
 
