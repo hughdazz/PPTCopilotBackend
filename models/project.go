@@ -18,13 +18,6 @@ type Project struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
-type Favorite struct {
-	Id      int       `orm:"auto;pk"`
-	User    *User     `orm:"rel(fk)"` // 设置一对多的反向关系
-	Project *Project  `orm:"rel(fk)"` // 设置一对多的反向关系
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-}
-
 func RefactProjects(projects []Project) []Project {
 	for i, project := range projects {
 		creator_temp, _ := GetUser(project.Creator.Id)
@@ -33,6 +26,7 @@ func RefactProjects(projects []Project) []Project {
 		projects[i].Name = project.Name
 		projects[i].Description = project.Description
 		projects[i].Creator = &creator
+		projects[i].Star = project.Star
 	}
 	return projects
 }

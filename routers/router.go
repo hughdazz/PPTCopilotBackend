@@ -24,6 +24,7 @@ func init() {
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
 		beego.NSRouter("/:id/avatar", &user.Controller{}, "post:UploadAvatar"),
 		beego.NSRouter("/:id/project", &user.Controller{}, "get:GetProjects"),
+		beego.NSRouter("/:id/favorite", &user.Controller{}, "get:GetFavorites"),
 
 		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
