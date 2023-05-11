@@ -11,6 +11,7 @@ func init() {
 	orm.RegisterModel(new(User))
 	orm.RegisterModel(new(Project))
 	orm.RegisterModel(new(File))
+	orm.RegisterModel(new(Favorite))
 
 	// 如果表不存在则创建表
 	orm.RunSyncdb("default", false, true)

@@ -24,6 +24,7 @@ func init() {
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
 		beego.NSRouter("/:id/avatar", &user.Controller{}, "post:UploadAvatar"),
 		beego.NSRouter("/:id/project", &user.Controller{}, "get:GetProjects"),
+		beego.NSRouter("/:id/favorite", &user.Controller{}, "get:GetFavorites"),
 
 		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
@@ -34,6 +35,7 @@ func init() {
 	projectController := beego.NewNamespace("/project",
 		beego.NSRouter("/", &project.Controller{}, "get:GetAll;post:CreateProject"),
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;post:CloneProject;put:UpdateProject;delete:DeleteProject"),
+		beego.NSRouter("/:id/star", &project.Controller{}, "post:StarProject"),
 		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
 		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
 		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
