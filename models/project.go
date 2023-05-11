@@ -32,7 +32,8 @@ func RefactProjects(projects []Project) []Project {
 func RefactProject(project Project) Project {
 	creator_temp, _ := GetUser(project.Creator.Id)
 	creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
-	project = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+	project.Creator = &creator
+
 	return project
 }
 
