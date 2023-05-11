@@ -21,7 +21,7 @@ func (this *Controller) GenOutline() {
 	prompt = strings.ReplaceAll(prompt, "{{topic}}", request.Topic)
 	prompt = strings.ReplaceAll(prompt, "{{sponsor}}", request.Sponsor)
 
-	outline_str, err := RequestGpt(prompt)
+	outline_str, err := RequestGpt(prompt, SlidesXML{}) //<slide></slide>
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline_str)
 		this.ServeJSON()
