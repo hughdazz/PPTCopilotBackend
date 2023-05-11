@@ -2,7 +2,12 @@ package gpt
 
 import (
 	"backend/conf"
+	"encoding/xml"
 	"fmt"
+	"reflect"
+	"regexp"
+	"strings"
+	"unicode"
 
 	"github.com/imroc/req"
 )
@@ -23,7 +28,53 @@ type ResponseBody struct {
 	} `json:"choices"`
 }
 
-func RequestGpt(prompt string) (string, error) {
+type SlidesXML struct {
+	XMLName  xml.Name     `xml:"slides"`
+	Sections []SectionXML `xml:"section"`
+}
+
+type SectionXML struct {
+	XMLName xml.Name `xml:"section"`
+	Class   string   `xml:"class,attr"`
+	Content []string `xml:"p"`
+}
+
+func ErrorScanner(gptResponse string, genXMLType interface{}) (string, error) {
+	// 确保程序按照genXMLType的类型进行解析
+	value := reflect.New(reflect.TypeOf(genXMLType)).Interface()
+	err := xml.Unmarshal([]byte(gptResponse), value)
+	if err != nil {
+		return "", fmt.Errorf("genXMLType格式与gptResponse不匹配: %s", err.Error())
+	}
+
+	// 移除所有转义字符
+	r := regexp.MustCompile(`\\.`)
+	gptResponse = r.ReplaceAllString(gptResponse, "")
+
+	// 移除所有不必要空格，"<>"标签内内容除外
+	inScope := false
+	var builder strings.Builder
+	for _, ch := range gptResponse {
+		if ch == '<' {
+			inScope = true
+			builder.WriteRune(ch)
+			continue
+		}
+		if ch == '>' {
+			inScope = false
+			builder.WriteRune(ch)
+			continue
+		}
+		if !inScope && unicode.IsSpace(ch) {
+			continue
+		}
+		builder.WriteRune(ch)
+	}
+
+	return builder.String(), nil
+}
+
+func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	apikey := conf.GetGptApiKey()
 
 	var body RequestBody
@@ -36,19 +87,37 @@ func RequestGpt(prompt string) (string, error) {
 
 	req_url := conf.GetGptApiUrl()
 	req.SetProxyUrl("http://host.docker.internal:7890")
-	// 进行http请求
-	resp, err := req.Post(req_url, req.BodyJSON(&body), req.Header(map[string]string{
-		"Authorization": "Bearer " + apikey,
-		"Content-Type":  "application/json",
-	}))
-	if err != nil {
-		return "", err
-	}
-	if resp.Response().StatusCode != 200 {
-		return "", fmt.Errorf("GPT请求失败，状态码为%d", resp.Response().StatusCode)
+
+	// 最多尝试3次
+	retryCount := 0
+
+	for retryCount < 3 {
+		// 进行http请求
+		resp, err := req.Post(req_url, req.BodyJSON(&body), req.Header(map[string]string{
+			"Authorization": "Bearer " + apikey,
+			"Content-Type":  "application/json",
+		}))
+		if err != nil {
+			return "", err
+		}
+		if resp.Response().StatusCode != 200 {
+			return "", fmt.Errorf("GPT请求失败，状态码为%d", resp.Response().StatusCode)
+		}
+
+		var res ResponseBody
+		resp.ToJSON(&res)
+
+		// 扫描错误
+		result, err := ErrorScanner(res.Choices[0].Message.Content, genXmlType)
+		if err != nil {
+			retryCount++
+			continue
+		}
+
+		// 成功
+		return result, nil
 	}
 
-	var res ResponseBody
-	resp.ToJSON(&res)
-	return res.Choices[0].Message.Content, nil
+	// 3次尝试均失败
+	return "", fmt.Errorf("all retries failed")
 }
