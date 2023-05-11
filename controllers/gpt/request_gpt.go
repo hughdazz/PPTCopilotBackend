@@ -2,7 +2,9 @@ package gpt
 
 import (
 	"backend/conf"
+	"encoding/xml"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 	"unicode"
@@ -26,15 +28,23 @@ type ResponseBody struct {
 	} `json:"choices"`
 }
 
-func ErrorScanner(gptResponse string) (string, error) {
-	// 确保程序以 '<' 开头，以 '>'结尾
-	if !(strings.HasPrefix(gptResponse, "<") && strings.HasSuffix(gptResponse, ">")) {
-		start := strings.Index(gptResponse, "<")
-		end := strings.LastIndex(gptResponse, ">")
-		if start == -1 || end == -1 {
-			return "", fmt.Errorf("response does not contain required '<' or '>'")
-		}
-		gptResponse = gptResponse[start : end+1]
+type SlidesXML struct {
+	XMLName  xml.Name     `xml:"slides"`
+	Sections []SectionXML `xml:"section"`
+}
+
+type SectionXML struct {
+	XMLName xml.Name `xml:"section"`
+	Class   string   `xml:"class,attr"`
+	Content []string `xml:"p"`
+}
+
+func ErrorScanner(gptResponse string, genXMLType interface{}) (string, error) {
+	// 确保程序按照genXMLType的类型进行解析
+	value := reflect.New(reflect.TypeOf(genXMLType)).Interface()
+	err := xml.Unmarshal([]byte(gptResponse), value)
+	if err != nil {
+		return "", fmt.Errorf("genXMLType格式与gptResponse不匹配: %s", err.Error())
 	}
 
 	// 移除所有转义字符
@@ -64,7 +74,7 @@ func ErrorScanner(gptResponse string) (string, error) {
 	return builder.String(), nil
 }
 
-func RequestGpt(prompt string) (string, error) {
+func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	apikey := conf.GetGptApiKey()
 
 	var body RequestBody
@@ -98,7 +108,7 @@ func RequestGpt(prompt string) (string, error) {
 		resp.ToJSON(&res)
 
 		// 扫描错误
-		result, err := ErrorScanner(res.Choices[0].Message.Content)
+		result, err := ErrorScanner(res.Choices[0].Message.Content, genXmlType)
 		if err != nil {
 			retryCount++
 			continue
