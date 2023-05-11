@@ -21,6 +21,18 @@ type File struct {
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
 
+func RefactFiles(files []File) []File {
+	for i, file := range files {
+		project_temp, _ := GetProject(file.Project.Id)
+		creator_temp, _ := GetUser(project_temp.Creator.Id)
+		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+		project := Project{Id: project_temp.Id, Name: project_temp.Name, Creator: &creator, Description: project_temp.Description, Created: project_temp.Created, Updated: project_temp.Updated}
+		files[i].Name = file.Name
+		files[i].Project = &project
+	}
+	return files
+}
+
 func GetFile(file_name string, id int) (File, error) {
 	//找到该项目下的所有file
 	files, err := GetFiles(id)

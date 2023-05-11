@@ -24,6 +24,8 @@ func (this *Controller) GetFiles() {
 		return
 	}
 
+	files = models.RefactFiles(files)
+
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", files)
 	this.ServeJSON()
 }
