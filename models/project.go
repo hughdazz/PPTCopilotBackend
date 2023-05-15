@@ -93,6 +93,18 @@ func IncProjectStar(id int) (Project, error) {
 	return project, err
 }
 
+func DecProjectStar(id int) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Star = project.Star - 1
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
+}
+
 func GetProject(id int) (Project, error) {
 	o := orm.NewOrm()
 	// 查找，使用
@@ -180,4 +192,24 @@ func StarProject(user_id int, project_id int) (Favorite, error) {
 	}
 	return favorite, nil
 
+}
+
+func UnstarProject(user_id int, project_id int) (Favorite, error) {
+	o := orm.NewOrm()
+	//查看是否已经收藏，如果已经收藏，则取消收藏
+	var favorite Favorite
+	err := o.QueryTable("favorite").Filter("user_id", user_id).Filter("project_id", project_id).One(&favorite)
+	if err == nil {
+		//如果已经收藏，则取消收藏
+		_, err := o.Delete(&favorite)
+		if err != nil {
+			return favorite, err
+		}
+		//取消收藏成功，项目收藏数减一
+		_, err = DecProjectStar(project_id)
+		if err != nil {
+			return favorite, err
+		}
+	}
+	return favorite, nil
 }
