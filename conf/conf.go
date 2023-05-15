@@ -7,6 +7,7 @@ type GptConfig struct {
 	GptModel                   string
 	GptProxy                   string
 	GptApiKey                  string
+	GptApiKeys                 []string
 	OutlinePromptTemplate      string
 	GuideSinglePromptTemplate  string
 	UpdateSinglePromptTemplate string
@@ -42,6 +43,7 @@ func init() {
 		GptModel:                   cfg.Section("").Key("gpt_model").String(),
 		GptProxy:                   cfg.Section("").Key("gpt_proxy").String(),
 		GptApiKey:                  cfg.Section("").Key("gpt_api_key").String(),
+		GptApiKeys:                 cfg.Section("").Key("gpt_api_keys").Strings(","),
 		OutlinePromptTemplate:      cfg.Section("").Key("outline_prompt_template").String(),
 		GuideSinglePromptTemplate:  cfg.Section("").Key("guide_single_prompt_template").String(),
 		UpdateSinglePromptTemplate: cfg.Section("").Key("single_page_prompt_template").String(),
@@ -71,6 +73,10 @@ func GetGptProxy() string {
 
 func GetGptApiKey() string {
 	return GptConfigInstance.GptApiKey
+}
+
+func GetGptApiKeys() []string {
+	return GptConfigInstance.GptApiKeys
 }
 
 func GetOutlinePromptTemplate() string {
