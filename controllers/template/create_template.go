@@ -13,12 +13,12 @@ type CreateRequest struct {
 	Cover      JsonObject `json:"cover"`
 	Thank      JsonObject `json:"thank"`
 	Transition JsonObject `json:"transition"`
-	Catalog_3  JsonObject `json:"catalog_3"`
-	Catalog_4  JsonObject `json:"catalog_4"`
-	Catalog_5  JsonObject `json:"catalog_5"`
-	Content_2  JsonObject `json:"content_2"`
-	Content_3  JsonObject `json:"content_3"`
-	Content_4  JsonObject `json:"content_4"`
+	Catalog_3  JsonObject `json:"catalog-3"`
+	Catalog_4  JsonObject `json:"catalog-4"`
+	Catalog_5  JsonObject `json:"catalog-5"`
+	Content_2  JsonObject `json:"content-2"`
+	Content_3  JsonObject `json:"content-3"`
+	Content_4  JsonObject `json:"content-4"`
 }
 
 func getRet(this *Controller, obj JsonObject) string {
