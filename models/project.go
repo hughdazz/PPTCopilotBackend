@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -154,14 +155,29 @@ func SearchProjects(keywords []string) ([]Project, error) {
 	return projects, nil
 }
 
-func LikeProject(user_id int, project_id int) (Favorite, error) {
+func StarProject(user_id int, project_id int) (Favorite, error) {
 	o := orm.NewOrm()
+	//查看是否已经收藏，如果已经收藏，则返回
+	var favorite Favorite
+	err := o.QueryTable("favorite").Filter("user_id", user_id).Filter("project_id", project_id).One(&favorite)
+	if err == nil {
+		return favorite, errors.New("已经收藏")
+	}
+	//如果没有收藏，则收藏
 	var user User
 	user.Id = user_id
 	var project Project
 	project.Id = project_id
-	favorite := Favorite{User: &user, Project: &project}
-	_, err := o.Insert(&favorite)
-	IncProjectStar(project_id)
-	return favorite, err
+	favorite = Favorite{User: &user, Project: &project}
+	_, err = o.Insert(&favorite)
+	if err != nil {
+		return favorite, err
+	}
+	//收藏成功，项目收藏数加一
+	project, err = IncProjectStar(project_id)
+	if err != nil {
+		return favorite, err
+	}
+	return favorite, nil
+
 }

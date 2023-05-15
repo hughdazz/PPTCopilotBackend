@@ -25,7 +25,7 @@ func (this *Controller) StarProject() {
 		return
 	}
 
-	favorite, err := models.LikeProject(id, project_id)
+	favorite, err := models.StarProject(id, project_id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
