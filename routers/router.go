@@ -5,7 +5,9 @@ import (
 	"backend/controllers/email"
 	"backend/controllers/gpt"
 	"backend/controllers/project"
+	"backend/controllers/template"
 	"backend/controllers/user"
+	"backend/controllers/websocket"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
@@ -51,11 +53,24 @@ func init() {
 	)
 	beego.AddNamespace(gptController)
 
+	// Template相关
+	templateController := beego.NewNamespace("/template",
+		beego.NSRouter("/", &template.Controller{}, "get:GetAllTemplates;post:CreateTemplate"),
+		beego.NSRouter("/:id", &template.Controller{}, "get:GetTemplate"),
+	)
+	beego.AddNamespace(templateController)
+
 	// email相关
 	emailController := beego.NewNamespace("/email",
 		beego.NSRouter("send_email", &email.Controller{}, "post:SendEmail"),
 		beego.NSRouter("verify_email", &email.Controller{}, "post:VerifyEmail"),
 	)
 	beego.AddNamespace(emailController)
+
+	// websocket相关
+	websocketController := beego.NewNamespace("/ws",
+		beego.NSRouter("/", &websocket.Controller{}, "get:Join"),
+	)
+	beego.AddNamespace(websocketController)
 
 }
