@@ -51,6 +51,13 @@ func init() {
 	)
 	beego.AddNamespace(gptController)
 
+	// Template相关
+	templateController := beego.NewNamespace("/template",
+		beego.NSRouter("/", &project.Controller{}, "get:GetAllTemplates;post:CreateTemplate"),
+		beego.NSRouter("/:id", &project.Controller{}, "get:GetTemplate"),
+	)
+	beego.AddNamespace(templateController)
+
 	// email相关
 	emailController := beego.NewNamespace("/email",
 		beego.NSRouter("send_email", &email.Controller{}, "post:SendEmail"),
