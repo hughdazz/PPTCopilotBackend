@@ -20,6 +20,13 @@ func GetFavorites(id int) ([]Favorite, error) {
 	return favorites, err
 }
 
+func GetFavorite(user_id int, project_id int) (Favorite, error) {
+	o := orm.NewOrm()
+	var favorite Favorite
+	err := o.QueryTable("favorite").Filter("user_id", user_id).Filter("project_id", project_id).One(&favorite)
+	return favorite, err
+}
+
 func RefactFavorites(favorites []Favorite) []Favorite {
 	for i, favorite := range favorites {
 		project_temp, _ := GetProject(favorite.Project.Id)
