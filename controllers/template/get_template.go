@@ -22,7 +22,8 @@ func (this *Controller) GetTemplate() {
 		this.ServeJSON()
 		return
 	}
+	Jsontemplate := models.GetJsonTemplate(template)
 
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "ok", template)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "ok", Jsontemplate)
 	this.ServeJSON()
 }

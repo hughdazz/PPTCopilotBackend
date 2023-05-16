@@ -6,22 +6,24 @@ import (
 	"encoding/json"
 )
 
-type JsonObject map[string]interface{}
-
 type CreateRequest struct {
-	Name       string     `json:"name"`
-	Cover      JsonObject `json:"cover"`
-	Thank      JsonObject `json:"thank"`
-	Transition JsonObject `json:"transition"`
-	Catalog_3  JsonObject `json:"catalog-3"`
-	Catalog_4  JsonObject `json:"catalog-4"`
-	Catalog_5  JsonObject `json:"catalog-5"`
-	Content_2  JsonObject `json:"content-2"`
-	Content_3  JsonObject `json:"content-3"`
-	Content_4  JsonObject `json:"content-4"`
+	Name       string            `json:"name"`
+	Cover      models.JsonObject `json:"cover"`
+	Thank      models.JsonObject `json:"thank"`
+	Transition models.JsonObject `json:"transition"`
+	Catalog_3  models.JsonObject `json:"catalog-3"`
+	Catalog_4  models.JsonObject `json:"catalog-4"`
+	Catalog_5  models.JsonObject `json:"catalog-5"`
+	Content_2  models.JsonObject `json:"content-2"`
+	Content_3  models.JsonObject `json:"content-3"`
+	Content_4  models.JsonObject `json:"content-4"`
 }
 
-func getRet(this *Controller, obj JsonObject) string {
+type PPTPages struct {
+	Pages []models.JsonObject `json:"pages"`
+}
+
+func getRet(this *Controller, obj models.JsonObject) string {
 	ret, err := json.Marshal(obj)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)

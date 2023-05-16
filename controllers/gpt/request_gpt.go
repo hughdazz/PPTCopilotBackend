@@ -121,3 +121,16 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	// 3次尝试均失败
 	return "", fmt.Errorf("all retries failed")
 }
+
+func GuideContentSection(outline string) (string, error) {
+	template := conf.GetGuideSinglePromptTemplate()
+	template = strings.ReplaceAll(template, "{{outline}}", outline)
+
+	guide_slide, err := RequestGpt(template, SectionXML{}) // <section></section>
+	if err != nil {
+		return "", err
+	}
+
+	guide_slide = strings.ReplaceAll(guide_slide, "\n", "")
+	return guide_slide, nil
+}
