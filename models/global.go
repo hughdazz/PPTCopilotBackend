@@ -14,4 +14,6 @@ func DropAllTables() {
 	o.Raw("DROP TABLE IF EXISTS outline").Exec()
 	// 删除Favorite表
 	o.Raw("DROP TABLE IF EXISTS favorite").Exec()
+	// 删除Template表
+	o.Raw("DROP TABLE IF EXISTS template").Exec()
 }

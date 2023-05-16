@@ -1,6 +1,10 @@
 package models
 
-import "github.com/beego/beego/v2/client/orm"
+import (
+	"encoding/json"
+
+	"github.com/beego/beego/v2/client/orm"
+)
 
 type Template struct {
 	Id   int    `orm:"auto;pk"`
@@ -15,6 +19,30 @@ type Template struct {
 	Content_2  string `orm:"type(text)"`
 	Content_3  string `orm:"type(text)"`
 	Content_4  string `orm:"type(text)"`
+}
+
+type JsonObject map[string]interface{}
+
+func GetObj(obj string) JsonObject {
+	var ret map[string]interface{}
+	json.Unmarshal([]byte(obj), &ret)
+	return ret
+}
+
+func GetJsonTemplate(template Template) JsonObject {
+	return map[string]interface{}{
+		"id":         template.Id,
+		"name":       template.Name,
+		"cover":      GetObj(template.Cover),
+		"thank":      GetObj(template.Thank),
+		"transition": GetObj(template.Transition),
+		"catalog_3":  GetObj(template.Catalog_3),
+		"catalog_4":  GetObj(template.Catalog_4),
+		"catalog_5":  GetObj(template.Catalog_5),
+		"content_2":  GetObj(template.Content_2),
+		"content_3":  GetObj(template.Content_3),
+		"content_4":  GetObj(template.Content_4),
+	}
 }
 
 func GetAllTemplates() []Template {
