@@ -44,3 +44,16 @@ func RefactFavorites(favorites []Favorite) []Favorite {
 	}
 	return favorites
 }
+
+func FavoriteToProjects(favorites []Favorite) []Project {
+	var projects []Project
+	for _, favorite := range favorites {
+		// 重构一下project
+		project_temp, _ := GetProject(favorite.Project.Id)
+		creator_temp, _ := GetUser(project_temp.Creator.Id)
+		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+		project := Project{Id: project_temp.Id, Name: project_temp.Name, Creator: &creator, Description: project_temp.Description, Star: project_temp.Star, Created: project_temp.Created, Updated: project_temp.Updated}
+		projects = append(projects, project)
+	}
+	return projects
+}
