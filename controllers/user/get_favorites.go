@@ -24,8 +24,9 @@ func (this *Controller) GetFavorites() {
 		return
 	}
 
-	favorites = models.RefactFavorites(favorites)
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", favorites)
+	// favorites = models.RefactFavorites(favorites)
+	projects := models.FavoriteToProjects(favorites)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", projects)
 	this.ServeJSON()
 
 }
