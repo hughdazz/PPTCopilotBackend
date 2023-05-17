@@ -20,11 +20,18 @@ func GetFavorites(id int) ([]Favorite, error) {
 	return favorites, err
 }
 
-func GetFavorite(user_id int, project_id int) (Favorite, error) {
-	o := orm.NewOrm()
-	var favorite Favorite
-	err := o.QueryTable("favorite").Filter("user_id", user_id).Filter("project_id", project_id).One(&favorite)
-	return favorite, err
+func GetFavorite(user_id int, project_id int) (Favorite, bool, error) {
+	user_favorite, err := GetFavorites(user_id)
+	if err != nil {
+		return Favorite{}, false, err
+	}
+	for _, favorite := range user_favorite {
+		if favorite.Project.Id == project_id {
+			return favorite, true, nil
+		}
+	}
+
+	return Favorite{}, false, nil
 }
 
 func RefactFavorites(favorites []Favorite) []Favorite {

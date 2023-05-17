@@ -51,15 +51,6 @@ func DeleteLineBreak(outline string) string {
 	return outline
 }
 
-// var slides struct {
-// 	XMLName  xml.Name `xml:"slides"`
-// 	Sections []struct {
-// 		XMLName xml.Name `xml:"section"`
-// 		Class   string   `xml:"class,attr"`
-// 		Content string   `xml:",innerxml"`
-// 	} `xml:"section"`
-// }
-
 type P struct {
 	XMLName xml.Name `xml:"p"`
 	Content string   `xml:",innerxml"`

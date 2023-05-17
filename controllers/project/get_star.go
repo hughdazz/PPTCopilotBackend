@@ -25,15 +25,14 @@ func (this *Controller) GetStar() {
 		return
 	}
 
-	favorite, err := models.GetFavorite(id, project_id)
-
+	_, res, err := models.GetFavorite(id, project_id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", favorite)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", res)
 	this.ServeJSON()
 
 }
