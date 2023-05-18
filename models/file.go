@@ -146,3 +146,34 @@ func CopyFile(srcFile, dstFile string) error {
 	_, err = io.Copy(dst, src)
 	return err
 }
+
+func SaveJsonsToFile(jsons_str []string, file_name string, project_id int) error {
+	// 保存文件
+	saveDir := GetSaveDir(project_id)
+	err := os.MkdirAll(saveDir, 0777)
+	if err != nil {
+		return err
+	}
+	filePath := saveDir + "/" + file_name
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	for i, json_str := range jsons_str {
+		if i == 0 && i != len(jsons_str)-1 {
+			json_str = "[" + json_str + ","
+		} else if i == len(jsons_str)-1 {
+			json_str = json_str + "]"
+		} else {
+			json_str = json_str + ","
+		}
+		_, err = file.WriteString(json_str)
+		if err != nil {
+			return err
+		}
+
+	}
+	return nil
+}
