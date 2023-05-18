@@ -3,52 +3,40 @@ package gpt
 import (
 	"backend/controllers"
 	"backend/models"
-	"strconv"
+	"encoding/json"
 )
 
+type GenPPTRequest struct {
+	OutlineId  int    `json:"outline_id"`
+	TemplateId int    `json:"template_id"`
+	ProjectId  int    `json:"project_id"`
+	FileName   string `json:"file_name"`
+}
+
 func (this *Controller) GenPPT() {
+	var request GenPPTRequest
+	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
-	//从form-data获取outline_id和template_id
-	outline_id_ := this.GetString("outline_id")
-	outline_id, err := strconv.Atoi(outline_id_)
-	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-	template_id_ := this.GetString("template_id")
-	template_id, err := strconv.Atoi(template_id_)
-	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-	project_id_ := this.GetString("project_id")
-	project_id, err := strconv.Atoi(project_id_)
-	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-
-	file_name := this.GetString("file_name")
-	file_name = file_name + ".json"
+	outlineId := request.OutlineId
+	templateId := request.TemplateId
+	projectId := request.ProjectId
+	fileName := request.FileName
 
 	//从数据库获取outline和template
-	outline, err := models.GetOutline(outline_id)
+	outline, err := models.GetOutline(outlineId)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
-	template, err := models.GetTemplate(template_id)
+	template, err := models.GetTemplate(templateId)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), template)
 		this.ServeJSON()
 		return
 	}
 
-	debug := 0
+	debug := 1
 	if debug == 1 {
 		resultxml := `<slides>
 		<section class='cover'>
@@ -88,13 +76,13 @@ func (this *Controller) GenPPT() {
 			JsonRes[i] = models.GetObj(res[i])
 		}
 
-		file, err := models.CreateFile(file_name, project_id)
+		file, err := models.CreateFile(fileName, projectId)
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), file)
 			this.ServeJSON()
 			return
 		}
-		err = models.SaveJsonsToFile(JsonRes, file_name, project_id)
+		err = models.SaveJsonsToFile(JsonRes, fileName, projectId)
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), res)
 			this.ServeJSON()
@@ -148,13 +136,13 @@ func (this *Controller) GenPPT() {
 		JsonRes[i] = models.GetObj(res[i])
 	}
 
-	file, err := models.CreateFile(file_name, project_id)
+	file, err := models.CreateFile(fileName, projectId)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), file)
 		this.ServeJSON()
 		return
 	}
-	err = models.SaveJsonsToFile(JsonRes, file_name, project_id)
+	err = models.SaveJsonsToFile(JsonRes, fileName, projectId)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), res)
 		this.ServeJSON()
