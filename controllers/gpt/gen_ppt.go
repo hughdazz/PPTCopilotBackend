@@ -48,7 +48,7 @@ func (this *Controller) GenPPT() {
 		return
 	}
 
-	debug := 1
+	debug := 0
 	if debug == 1 {
 		resultxml := `<slides>
 		<section class='cover'>
@@ -94,7 +94,7 @@ func (this *Controller) GenPPT() {
 			this.ServeJSON()
 			return
 		}
-		err = models.SaveJsonsToFile(res, file_name, project_id)
+		err = models.SaveJsonsToFile(JsonRes, file_name, project_id)
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), res)
 			this.ServeJSON()
@@ -154,7 +154,7 @@ func (this *Controller) GenPPT() {
 		this.ServeJSON()
 		return
 	}
-	err = models.SaveJsonsToFile(res, file_name, project_id)
+	err = models.SaveJsonsToFile(JsonRes, file_name, project_id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), res)
 		this.ServeJSON()

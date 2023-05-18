@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"io"
 	"os"
@@ -147,33 +148,32 @@ func CopyFile(srcFile, dstFile string) error {
 	return err
 }
 
-func SaveJsonsToFile(jsons_str []string, file_name string, project_id int) error {
-	// 保存文件
-	saveDir := GetSaveDir(project_id)
-	err := os.MkdirAll(saveDir, 0777)
+func SaveJsonsToFile(data interface{}, file_name string, project_id int) error {
+	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
-	filePath := saveDir + "/" + file_name
+
+	saveDir := GetSaveDir(project_id)
+	// 创建文件夹
+	err = os.MkdirAll(saveDir, 0777)
+	if err != nil {
+		return err
+	}
+
+	filePath := GetFilePathByName(file_name, project_id)
+	// 创建文件
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	for i, json_str := range jsons_str {
-		if i == 0 && i != len(jsons_str)-1 {
-			json_str = "[" + json_str + ","
-		} else if i == len(jsons_str)-1 {
-			json_str = json_str + "]"
-		} else {
-			json_str = json_str + ","
-		}
-		_, err = file.WriteString(json_str)
-		if err != nil {
-			return err
-		}
-
+	// 写入文件
+	_, err = file.Write(jsonData)
+	if err != nil {
+		return err
 	}
 	return nil
+
 }
