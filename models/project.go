@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -13,6 +14,7 @@ type Project struct {
 	Name        string    `orm:"size(100)"`
 	Description string    `orm:"size(100)"`
 	Creator     *User     `orm:"rel(fk)"` // 设置一对多的反向关系
+	Star        int       `orm:"default(0)"`
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
@@ -25,6 +27,7 @@ func RefactProjects(projects []Project) []Project {
 		projects[i].Name = project.Name
 		projects[i].Description = project.Description
 		projects[i].Creator = &creator
+		projects[i].Star = project.Star
 	}
 	return projects
 }
@@ -32,7 +35,8 @@ func RefactProjects(projects []Project) []Project {
 func RefactProject(project Project) Project {
 	creator_temp, _ := GetUser(project.Creator.Id)
 	creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
-	project = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+	project.Creator = &creator
+
 	return project
 }
 
@@ -71,6 +75,30 @@ func UpdateProjectDescription(id int, description string) (Project, error) {
 	err := o.Read(&project)
 	if err == nil {
 		project.Description = description
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
+}
+
+func IncProjectStar(id int) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Star = project.Star + 1
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
+}
+
+func DecProjectStar(id int) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Star = project.Star - 1
 		_, err := o.Update(&project)
 		return project, err
 	}
@@ -137,4 +165,51 @@ func SearchProjects(keywords []string) ([]Project, error) {
 	}
 
 	return projects, nil
+}
+
+func StarProject(user_id int, project_id int) (Favorite, error) {
+	o := orm.NewOrm()
+	//查看是否已经收藏，如果已经收藏，则返回
+	var favorite Favorite
+	err := o.QueryTable("favorite").Filter("user_id", user_id).Filter("project_id", project_id).One(&favorite)
+	if err == nil {
+		return favorite, errors.New("已经收藏")
+	}
+	//如果没有收藏，则收藏
+	var user User
+	user.Id = user_id
+	var project Project
+	project.Id = project_id
+	favorite = Favorite{User: &user, Project: &project}
+	_, err = o.Insert(&favorite)
+	if err != nil {
+		return favorite, err
+	}
+	//收藏成功，项目收藏数加一
+	project, err = IncProjectStar(project_id)
+	if err != nil {
+		return favorite, err
+	}
+	return favorite, nil
+
+}
+
+func UnstarProject(user_id int, project_id int) (Favorite, error) {
+	o := orm.NewOrm()
+	//查看是否已经收藏，如果已经收藏，则取消收藏
+	var favorite Favorite
+	err := o.QueryTable("favorite").Filter("user_id", user_id).Filter("project_id", project_id).One(&favorite)
+	if err == nil {
+		//如果已经收藏，则取消收藏
+		_, err := o.Delete(&favorite)
+		if err != nil {
+			return favorite, err
+		}
+		//取消收藏成功，项目收藏数减一
+		_, err = DecProjectStar(project_id)
+		if err != nil {
+			return favorite, err
+		}
+	}
+	return favorite, nil
 }

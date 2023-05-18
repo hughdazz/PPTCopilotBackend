@@ -1,4 +1,4 @@
-package project
+package user
 
 import (
 	"backend/controllers"
@@ -6,26 +6,24 @@ import (
 	"strconv"
 )
 
-func (this *Controller) GetFiles() {
+func (this *Controller) GetProjects() {
+	// 获取路由参数
 	id_ := this.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(id_)
-	if err != nil {
-
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-
-	files, err := models.GetFiles(id)
 	if err != nil {
 
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
+	projects, err := models.GetProjects(id)
+	if err != nil {
 
-	files = models.RefactFiles(files)
-
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", files)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.ServeJSON()
+		return
+	}
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", projects)
 	this.ServeJSON()
+
 }

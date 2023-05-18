@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `description` varchar(100) NOT NULL DEFAULT '',
   `creator_id` integer NOT NULL,
+  `star_count` integer NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL
 ) ENGINE = InnoDB;

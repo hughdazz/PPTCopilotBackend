@@ -5,7 +5,9 @@ import (
 	"backend/controllers/email"
 	"backend/controllers/gpt"
 	"backend/controllers/project"
+	"backend/controllers/template"
 	"backend/controllers/user"
+	"backend/controllers/websocket"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
@@ -16,13 +18,15 @@ func init() {
 
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/initial", &controllers.InitialController{})
-	beego.Router("/static/*", &controllers.StaticRouter{})
+	beego.Router("/_static/*", &controllers.StaticRouter{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",
 		beego.NSRouter("/", &user.Controller{}, "get:GetAll;post:CreateUser"),
 		beego.NSRouter("/:id", &user.Controller{}, "get:GetUser;put:UpdateUser;delete:DeleteUser"),
 		beego.NSRouter("/:id/avatar", &user.Controller{}, "post:UploadAvatar"),
+		beego.NSRouter("/:id/project", &user.Controller{}, "get:GetProjects"),
+		beego.NSRouter("/:id/favorite", &user.Controller{}, "get:GetFavorites"),
 
 		beego.NSRouter("/login", &user.Controller{}, "post:Login"),
 		beego.NSRouter("/logout", &user.Controller{}, "post:Logout"),
@@ -32,7 +36,8 @@ func init() {
 	// Project相关
 	projectController := beego.NewNamespace("/project",
 		beego.NSRouter("/", &project.Controller{}, "get:GetAll;post:CreateProject"),
-		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;put:UpdateProject;delete:DeleteProject"),
+		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;post:CloneProject;put:UpdateProject;delete:DeleteProject"),
+		beego.NSRouter("/:id/star", &project.Controller{}, "post:StarProject;delete:UnstarProject;get:GetStar"),
 		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
 		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
 		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
@@ -45,8 +50,16 @@ func init() {
 		beego.NSRouter("update_slide", &gpt.Controller{}, "post:UpdateSlide"),
 		beego.NSRouter("guide_slide", &gpt.Controller{}, "post:GuideSlide"),
 		beego.NSRouter("/outline/:id", &gpt.Controller{}, "get:GetOutline;post:UpdateOutline"),
+		beego.NSRouter("/gen_ppt", &gpt.Controller{}, "post:GenPPT"),
 	)
 	beego.AddNamespace(gptController)
+
+	// Template相关
+	templateController := beego.NewNamespace("/template",
+		beego.NSRouter("/", &template.Controller{}, "get:GetAllTemplates;post:CreateTemplate"),
+		beego.NSRouter("/:id", &template.Controller{}, "get:GetTemplate"),
+	)
+	beego.AddNamespace(templateController)
 
 	// email相关
 	emailController := beego.NewNamespace("/email",
@@ -54,5 +67,11 @@ func init() {
 		beego.NSRouter("verify_email", &email.Controller{}, "post:VerifyEmail"),
 	)
 	beego.AddNamespace(emailController)
+
+	// websocket相关
+	websocketController := beego.NewNamespace("/ws",
+		beego.NSRouter("/", &websocket.Controller{}, "get:Join"),
+	)
+	beego.AddNamespace(websocketController)
 
 }

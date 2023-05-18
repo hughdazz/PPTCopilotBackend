@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,6 +19,18 @@ type File struct {
 	Project *Project  `orm:"rel(fk)"` // 设置一对多的反向关系
 	Created time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated time.Time `orm:"auto_now;type(datetime)"`
+}
+
+func RefactFiles(files []File) []File {
+	for i, file := range files {
+		project_temp, _ := GetProject(file.Project.Id)
+		creator_temp, _ := GetUser(project_temp.Creator.Id)
+		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+		project := Project{Id: project_temp.Id, Name: project_temp.Name, Creator: &creator, Star: project_temp.Star, Description: project_temp.Description, Created: project_temp.Created, Updated: project_temp.Updated}
+		files[i].Name = file.Name
+		files[i].Project = &project
+	}
+	return files
 }
 
 func GetFile(file_name string, id int) (File, error) {
@@ -107,7 +120,7 @@ func DeleteFileByPath(path string) error {
 
 func GetFilePathByName(file_name string, project_id int) string {
 
-	saveDir := "static/files/" + strconv.Itoa(project_id)
+	saveDir := "static/project/" + strconv.Itoa(project_id)
 
 	filePath := saveDir + "/" + file_name
 	return filePath
@@ -115,4 +128,21 @@ func GetFilePathByName(file_name string, project_id int) string {
 func GetSaveDir(project_id int) string {
 	saveDir := "static/project/" + strconv.Itoa(project_id)
 	return saveDir
+}
+
+func CopyFile(srcFile, dstFile string) error {
+	src, err := os.Open(srcFile)
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	dst, err := os.Create(dstFile)
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, src)
+	return err
 }

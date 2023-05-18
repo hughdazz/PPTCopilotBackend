@@ -1,4 +1,4 @@
-package project
+package template
 
 import (
 	"backend/controllers"
@@ -6,26 +6,24 @@ import (
 	"strconv"
 )
 
-func (this *Controller) GetFiles() {
+func (this *Controller) GetTemplate() {
+	// :id
 	id_ := this.Ctx.Input.Param(":id")
 	id, err := strconv.Atoi(id_)
 	if err != nil {
-
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
-
-	files, err := models.GetFiles(id)
-	if err != nil {
-
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	files = models.RefactFiles(files)
+	template, err := models.GetTemplate(id)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.ServeJSON()
+		return
+	}
+	Jsontemplate := models.GetJsonTemplate(template)
 
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", files)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "ok", Jsontemplate)
 	this.ServeJSON()
 }

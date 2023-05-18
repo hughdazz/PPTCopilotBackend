@@ -23,6 +23,7 @@ func (this *Controller) GetProject() {
 		this.ServeJSON()
 		return
 	}
+	project = models.RefactProject(project)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", project)
 	this.ServeJSON()
