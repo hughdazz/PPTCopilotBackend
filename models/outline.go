@@ -156,6 +156,11 @@ func contentReplace(section Slide, template Template) []string {
 	var retList []string
 	// 如果p_num-1<=4，只用生成一个页面
 	var index = 1
+	var ret string
+	ret = template.Transition
+	ret = strings.ReplaceAll(ret, "{{sub_title}}", sub_title)
+	retList = append(retList, ret)
+
 	for p_num-1 > 0 {
 		if p_num-1 <= 4 {
 			var ret string
@@ -234,6 +239,7 @@ func GenPPT(xmlStr string, template Template) ([]string, error) {
 		}
 
 	}
+	ppt = append(ppt, template.Thank)
 
 	return ppt, nil
 
