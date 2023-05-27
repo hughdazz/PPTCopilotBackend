@@ -7,17 +7,18 @@ import (
 )
 
 type CreateRequest struct {
-	Name       string            `json:"name"`
-	Cover      models.JsonObject `json:"cover"`
-	Thank      models.JsonObject `json:"thank"`
-	Transition models.JsonObject `json:"transition"`
-	Catalog_3  models.JsonObject `json:"catalog-3"`
-	Catalog_4  models.JsonObject `json:"catalog-4"`
-	Catalog_5  models.JsonObject `json:"catalog-5"`
-	Content_1  models.JsonObject `json:"content-1"`
-	Content_2  models.JsonObject `json:"content-2"`
-	Content_3  models.JsonObject `json:"content-3"`
-	Content_4  models.JsonObject `json:"content-4"`
+	Name     string              `json:"name"`
+	Template []models.JsonObject `json:"template"`
+	// Cover      models.JsonObject `json:"cover"`
+	// Thank      models.JsonObject `json:"thank"`
+	// Transition models.JsonObject `json:"transition"`
+	// Catalog_3  models.JsonObject `json:"catalog-3"`
+	// Catalog_4  models.JsonObject `json:"catalog-4"`
+	// Catalog_5  models.JsonObject `json:"catalog-5"`
+	// Content_1  models.JsonObject `json:"content-1"`
+	// Content_2  models.JsonObject `json:"content-2"`
+	// Content_3  models.JsonObject `json:"content-3"`
+	// Content_4  models.JsonObject `json:"content-4"`
 }
 
 type PPTPages struct {
@@ -39,15 +40,16 @@ func (this *Controller) CreateTemplate() {
 
 	template := models.Template{
 		Name:       req.Name,
-		Cover:      getRet(this, req.Cover),
-		Thank:      getRet(this, req.Thank),
-		Transition: getRet(this, req.Transition),
-		Catalog_3:  getRet(this, req.Catalog_3),
-		Catalog_4:  getRet(this, req.Catalog_4),
-		Catalog_5:  getRet(this, req.Catalog_5),
-		Content_2:  getRet(this, req.Content_2),
-		Content_3:  getRet(this, req.Content_3),
-		Content_4:  getRet(this, req.Content_4),
+		Cover:      getRet(this, req.Template[0]),
+		Transition: getRet(this, req.Template[1]),
+		Catalog_3:  getRet(this, req.Template[2]),
+		Catalog_4:  getRet(this, req.Template[3]),
+		Catalog_5:  getRet(this, req.Template[4]),
+		Content_1:  getRet(this, req.Template[5]),
+		Content_2:  getRet(this, req.Template[6]),
+		Content_3:  getRet(this, req.Template[7]),
+		Content_4:  getRet(this, req.Template[8]),
+		Thank:      getRet(this, req.Template[9]),
 	}
 	err := models.CreateTemplate(template)
 	if err != nil {

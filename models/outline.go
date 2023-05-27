@@ -113,8 +113,8 @@ func coverReplace(section Slide, cover string) string {
 	var title = section.P_arr[0].Content
 	var description = section.P_arr[1].Content
 
-	cover = strings.ReplaceAll(cover, "{{big_title}}", title)
-	cover = strings.ReplaceAll(cover, "{{self_description}}", description)
+	cover = strings.ReplaceAll(cover, "{{title}}", title)
+	cover = strings.ReplaceAll(cover, "{{description}}", description)
 
 	return cover
 }
