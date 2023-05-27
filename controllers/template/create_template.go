@@ -14,6 +14,7 @@ type CreateRequest struct {
 	Catalog_3  models.JsonObject `json:"catalog-3"`
 	Catalog_4  models.JsonObject `json:"catalog-4"`
 	Catalog_5  models.JsonObject `json:"catalog-5"`
+	Content_1  models.JsonObject `json:"content-1"`
 	Content_2  models.JsonObject `json:"content-2"`
 	Content_3  models.JsonObject `json:"content-3"`
 	Content_4  models.JsonObject `json:"content-4"`

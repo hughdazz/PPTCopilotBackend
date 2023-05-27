@@ -159,7 +159,9 @@ func contentReplace(section Slide, template Template) []string {
 	for p_num-1 > 0 {
 		if p_num-1 <= 4 {
 			var ret string
-			if p_num-1 == 2 {
+			if p_num-1 == 1 {
+				ret = template.Content_1
+			} else if p_num-1 == 2 {
 				ret = template.Content_2
 			} else if p_num-1 == 3 {
 				ret = template.Content_3
