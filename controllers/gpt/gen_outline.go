@@ -22,7 +22,7 @@ func (this *Controller) GenOutline() {
 	prompt = strings.ReplaceAll(prompt, "{{sponsor}}", request.Sponsor)
 
 	outline_str := ``
-	debug := 1
+	debug := 0
 	if debug == 1 {
 		outline_str = `<slides>
 		<section class='cover'>
@@ -48,17 +48,14 @@ func (this *Controller) GenOutline() {
 		</section>
 		</slides>`
 	} else {
-		outline_str, err := RequestGpt(prompt, SlidesXML{}) //<slide></slide>
+		var err error
+		outline_str, err = RequestGpt(prompt, SlidesXML{}) //<slide></slide>
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline_str)
 			this.ServeJSON()
 			return
 		}
 	}
-
-	// 替换换行符
-	outline_str = strings.ReplaceAll(outline_str, "\n", "")
-	outline_str = strings.ReplaceAll(outline_str, "\\\n", "")
 
 	outline, err := models.CreateOutline(outline_str)
 	if err != nil {
