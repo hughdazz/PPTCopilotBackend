@@ -7,7 +7,7 @@ import (
 
 type InfoResponse struct {
 	Id       int    `json:"id"`
-	Name     string `json:"name"`
+	Title    string `json:"title"`
 	ImageUrl string `json:"imageUrl"`
 }
 
@@ -19,7 +19,7 @@ func (this *Controller) GetTemplatesInfo() {
 	for i, template := range templates {
 		jsonTemplates[i] = InfoResponse{
 			Id:       template.Id,
-			Name:     template.Name,
+			Title:    template.Name,
 			ImageUrl: models.GetTemplateImageUrl(template.Id),
 		}
 	}
