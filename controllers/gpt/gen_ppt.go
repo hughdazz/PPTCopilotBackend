@@ -4,6 +4,7 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"encoding/json"
+	"fmt"
 )
 
 type GenPPTRequest struct {
@@ -36,7 +37,7 @@ func (this *Controller) GenPPT() {
 		return
 	}
 
-	debug := 1
+	debug := 0
 	if debug == 1 {
 		resultxml := `<slides>
 		<section class='cover'>
@@ -106,6 +107,7 @@ func (this *Controller) GenPPT() {
 	guide_slides := make([]string, 0)
 	for _, content_section := range content_sections {
 		guide_slide, err := GuideContentSection(content_section)
+		fmt.Println(guide_slide)
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 			this.ServeJSON()

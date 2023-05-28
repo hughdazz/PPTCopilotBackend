@@ -16,6 +16,7 @@ type Template struct {
 	Catalog_3  string `orm:"type(text)"`
 	Catalog_4  string `orm:"type(text)"`
 	Catalog_5  string `orm:"type(text)"`
+	Content_1  string `orm:"type(text)"`
 	Content_2  string `orm:"type(text)"`
 	Content_3  string `orm:"type(text)"`
 	Content_4  string `orm:"type(text)"`
@@ -39,6 +40,7 @@ func GetJsonTemplate(template Template) JsonObject {
 		"catalog_3":  GetObj(template.Catalog_3),
 		"catalog_4":  GetObj(template.Catalog_4),
 		"catalog_5":  GetObj(template.Catalog_5),
+		"content_1":  GetObj(template.Content_1),
 		"content_2":  GetObj(template.Content_2),
 		"content_3":  GetObj(template.Content_3),
 		"content_4":  GetObj(template.Content_4),

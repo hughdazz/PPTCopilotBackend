@@ -113,8 +113,8 @@ func coverReplace(section Slide, cover string) string {
 	var title = section.P_arr[0].Content
 	var description = section.P_arr[1].Content
 
-	cover = strings.ReplaceAll(cover, "{{big_title}}", title)
-	cover = strings.ReplaceAll(cover, "{{self_description}}", description)
+	cover = strings.ReplaceAll(cover, "{{title}}", title)
+	cover = strings.ReplaceAll(cover, "{{description}}", description)
 
 	return cover
 }
@@ -156,10 +156,17 @@ func contentReplace(section Slide, template Template) []string {
 	var retList []string
 	// 如果p_num-1<=4，只用生成一个页面
 	var index = 1
+	var ret string
+	ret = template.Transition
+	ret = strings.ReplaceAll(ret, "{{sub_title}}", sub_title)
+	retList = append(retList, ret)
+
 	for p_num-1 > 0 {
 		if p_num-1 <= 4 {
 			var ret string
-			if p_num-1 == 2 {
+			if p_num-1 == 1 {
+				ret = template.Content_1
+			} else if p_num-1 == 2 {
 				ret = template.Content_2
 			} else if p_num-1 == 3 {
 				ret = template.Content_3
@@ -232,6 +239,7 @@ func GenPPT(xmlStr string, template Template) ([]string, error) {
 		}
 
 	}
+	ppt = append(ppt, template.Thank)
 
 	return ppt, nil
 

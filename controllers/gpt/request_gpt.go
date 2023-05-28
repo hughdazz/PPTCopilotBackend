@@ -75,7 +75,14 @@ func ErrorScanner(gptResponse string, genXMLType interface{}) (string, error) {
 }
 
 func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
-	apikey := conf.GetGptApiKey()
+	var apikey string
+
+	// 当GetApiKey()得到合法的apikey时，才进行下一步
+	for apikey == "" {
+		apikey, _ = GetApiKey()
+	}
+	fmt.Println("apikey: " + apikey)
+	defer ReleaseApiKey(apikey)
 
 	var body RequestBody
 	body.Model = conf.GetGptModel()
