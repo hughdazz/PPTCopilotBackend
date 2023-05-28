@@ -57,7 +57,9 @@ func init() {
 	// Template相关
 	templateController := beego.NewNamespace("/template",
 		beego.NSRouter("/", &template.Controller{}, "get:GetAllTemplates;post:CreateTemplate"),
+		beego.NSRouter("/info", &template.Controller{}, "get:GetTemplatesInfo"),
 		beego.NSRouter("/:id", &template.Controller{}, "get:GetTemplate"),
+		beego.NSRouter("/:id/image", &template.Controller{}, "post:UploadImage"),
 	)
 	beego.AddNamespace(templateController)
 
