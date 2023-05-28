@@ -2,6 +2,8 @@ package models
 
 import (
 	"encoding/json"
+	"os"
+	"strconv"
 
 	"github.com/beego/beego/v2/client/orm"
 )
@@ -72,4 +74,20 @@ func CreateTemplate(template Template) error {
 	o := orm.NewOrm()
 	_, err := o.Insert(&template)
 	return err
+}
+
+func GetTemplateDir(template_id int) string {
+	return "static/template/" + strconv.Itoa(template_id)
+}
+
+func GetTemplateImageUrl(template_id int) string {
+	image_path := "static/template/" + strconv.Itoa(template_id) + "/cover.png"
+	//查看是否存在该文件
+	_, err := os.Stat(image_path)
+	if err != nil {
+		return ""
+	}
+	res := "http://localhost:8080/" + image_path
+
+	return res
 }
