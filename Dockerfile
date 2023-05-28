@@ -14,3 +14,10 @@ RUN go install github.com/beego/bee/v2@latest && go mod download && go mod verif
 
 COPY . .
 
+# 如果没有docker-compose未传递，使用默认值host.docker.internal
+ARG MYSQL_HOST=host.docker.internal
+ARG MYSQL_PORT=3306
+ENV MYSQL_HOST=${MYSQL_HOST}
+ENV MYSQL_PORT=${MYSQL_PORT}
+
+CMD ["bee", "run"]

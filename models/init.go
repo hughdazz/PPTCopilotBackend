@@ -1,11 +1,20 @@
 package models
 
-import "github.com/beego/beego/v2/client/orm"
+import (
+	"github.com/beego/beego/v2/client/orm"
+	"os"
+	"fmt"
+)
 
 // 初始化数据表
 func init() {
-	// 设置默认数据库
-	orm.RegisterDataBase("default", "mysql", "root:admin@tcp(host.docker.internal:3307)/now_db?charset=utf8&loc=Local")
+	// 获取环境变量
+	mysqlHost := os.Getenv("MYSQL_HOST")
+	mysqlPort := os.Getenv("MYSQL_PORT")
+	fmt.Println("MYSQL_HOST: ", mysqlHost)
+	fmt.Println("MYSQL_PORT: ", mysqlPort)
+	orm.RegisterDataBase("default", "mysql", "root:admin@tcp("+mysqlHost+":"+mysqlPort+")/now_db?charset=utf8&loc=Local")
+
 	// 注册定义的model
 	orm.RegisterModel(new(Outline))
 	orm.RegisterModel(new(User))

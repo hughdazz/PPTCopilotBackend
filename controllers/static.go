@@ -22,10 +22,10 @@ func (c *StaticRouter) Get() {
 		http.ServeFile(c.Ctx.ResponseWriter, c.Ctx.Request, "static/user/default.png")
 		return
 	}
-	if strings.Contains(url, "project/") && strings.Contains(url, "cover.png") {
-		http.ServeFile(c.Ctx.ResponseWriter, c.Ctx.Request, "static/project/default.png")
-		return
-	}
+	//if strings.Contains(url, "project/") && strings.Contains(url, "cover.png") {
+	//	http.ServeFile(c.Ctx.ResponseWriter, c.Ctx.Request, "static/project/default.png")
+	//	return
+	//}
 	http.ServeFile(c.Ctx.ResponseWriter, c.Ctx.Request, url)
 }
 
