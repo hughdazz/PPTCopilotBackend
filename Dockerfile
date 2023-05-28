@@ -15,6 +15,6 @@ RUN go install github.com/beego/bee/v2@latest && go mod download && go mod verif
 COPY . .
 
 # 连接mysql并创建数据库now_db
-RUN -h host.docker.internal -P3307 -padmin -e "create database now_db"
+RUN mysql -h host.docker.internal -P3307 -padmin -e "create database now_db"
 
 CMD ["bee", "run"]
