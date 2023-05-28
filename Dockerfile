@@ -1,5 +1,8 @@
 FROM golang:1.20
 
+# 如果没有定义MYSQL_HOST，则使用host.docker.internal
+ENV MYSQL_HOST ${MYSQL_HOST:-host.docker.internal}
+
 WORKDIR /home/tmp
 # 安装mysql-client
 RUN apt-get update && apt-get install -y lsb-release && wget https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb && export DEBIAN_FRONTEND=noninteractive && dpkg -i mysql-apt-config_0.8.24-1_all.deb && apt-get update && apt-get install -y mysql-client
@@ -15,6 +18,6 @@ RUN go install github.com/beego/bee/v2@latest && go mod download && go mod verif
 COPY . .
 
 # 连接mysql并创建数据库now_db
-RUN mysql -h host.docker.internal -P3307 -padmin -e "create database now_db"
+RUN mysql -h ${MYSQL_HOST} -P3307 -padmin -e "create database now_db"
 
 CMD ["bee", "run"]
