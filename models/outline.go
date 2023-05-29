@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/xml"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -49,6 +50,15 @@ func RefactOutline(outline Outline) Outline {
 func DeleteLineBreak(outline string) string {
 	outline = strings.ReplaceAll(outline, "\n", "")
 	return outline
+}
+
+func RefactXML(xmlStr string) string {
+	xmlStr = strings.ReplaceAll(xmlStr, "\n", "")
+	xmlStr = strings.ReplaceAll(xmlStr, "\t", "")
+	regex := "(<.*>)"
+	re := regexp.MustCompile(regex)
+	matches := re.FindAllString(xmlStr, -1)
+	return matches[0]
 }
 
 type P struct {
