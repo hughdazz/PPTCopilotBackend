@@ -21,7 +21,7 @@ func (this *Controller) GenPPT() {
 	outlineId := request.OutlineId
 	templateId := request.TemplateId
 	projectId := request.ProjectId
-	fileName := request.FileName
+	fileName := request.FileName + ".json"
 
 	//从数据库获取outline和template
 	outline, err := models.GetOutline(outlineId)
