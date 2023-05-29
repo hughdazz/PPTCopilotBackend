@@ -29,7 +29,7 @@ func (this *InitialController) Get() {
 	models.CreateProject("project1", "admin", 1)
 
 	// 初始化File
-	models.CreateFile("cover.png", 1)
+	// models.CreateFile("cover.png", 1)
 
 	this.Data["json"] = MakeResponse(OK, "success", nil)
 	this.ServeJSON()
