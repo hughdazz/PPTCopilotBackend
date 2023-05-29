@@ -3,6 +3,7 @@ package gpt
 import (
 	"backend/conf"
 	"backend/controllers"
+	"backend/models"
 	"encoding/json"
 	"strings"
 )
@@ -26,6 +27,7 @@ func (this *Controller) UpdateSlide() {
 		this.ServeJSON()
 		return
 	}
+	updated_slide = models.RefactXML(updated_slide)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", updated_slide)
 	this.ServeJSON()
