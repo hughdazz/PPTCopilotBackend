@@ -37,7 +37,7 @@ func (this *Controller) GenPPT() {
 		return
 	}
 
-	debug := 1
+	debug := 0
 	if debug == 1 {
 		resultxml := `<slides>
 		<section class='cover'>
