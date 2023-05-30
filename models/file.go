@@ -189,5 +189,18 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 	}
 	file.Name = new_file_name
 	_, err = o.Update(&file)
+	// 更新文件名
+	if err != nil {
+		return File{}, err
+	}
+
+	// 更新文件路径
+	old_path := GetFilePathByName(old_file_name, project_id)
+	new_path := GetFilePathByName(new_file_name, project_id)
+	err = os.Rename(old_path, new_path)
+	if err != nil {
+		return File{}, err
+	}
+
 	return file, err
 }
