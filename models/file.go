@@ -68,9 +68,12 @@ func CreateFile(name string, project_id int) (File, error) {
 		return File{}, err
 	}
 
-	_file, err := GetFile(name, project_id)
+	_file, _ := GetFile(name, project_id)
 	if _file.Name == name {
-		return File{}, errors.New("文件已存在")
+		//更新时间
+		_file.Updated = time.Now()
+		_, err = o.Update(&_file)
+		return _file, err
 	}
 
 	file := File{Name: name, Project: &project}
@@ -176,4 +179,15 @@ func SaveJsonsToFile(data interface{}, file_name string, project_id int) error {
 	}
 	return nil
 
+}
+
+func UpdateFileName(project_id int, old_file_name string, new_file_name string) (File, error) {
+	o := orm.NewOrm()
+	file, err := GetFile(old_file_name, project_id)
+	if err != nil {
+		return File{}, err
+	}
+	file.Name = new_file_name
+	_, err = o.Update(&file)
+	return file, err
 }
