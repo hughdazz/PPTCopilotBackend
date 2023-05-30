@@ -19,6 +19,7 @@ func init() {
 	beego.Router("/", &controllers.MainController{})
 	beego.Router("/initial", &controllers.InitialController{})
 	beego.Router("/_static/*", &controllers.StaticRouter{})
+	beego.Router("/upload", &controllers.UploadRouter{})
 
 	// User相关
 	userController := beego.NewNamespace("/user",
