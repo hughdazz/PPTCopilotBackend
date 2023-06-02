@@ -95,10 +95,10 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	req_url := conf.GetGptApiUrl()
 	req.SetProxyUrl("http://host.docker.internal:7890")
 
-	// 最多尝试3次
+	// 最多尝试2次
 	retryCount := 0
 
-	for retryCount < 3 {
+	for retryCount < 2 {
 		// 进行http请求
 		resp, err := req.Post(req_url, req.BodyJSON(&body), req.Header(map[string]string{
 			"Authorization": "Bearer " + apikey,
