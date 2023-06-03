@@ -2,6 +2,8 @@ FROM golang:1.20
 
 WORKDIR /home/tmp
 # 安装mysql-client
+# 换源 
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 RUN apt-get update && apt-get install -y lsb-release && wget https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb && export DEBIAN_FRONTEND=noninteractive && dpkg -i mysql-apt-config_0.8.24-1_all.deb && apt-get update && apt-get install -y mysql-client
 
 WORKDIR /home/app
