@@ -25,10 +25,18 @@ func (this *Controller) CreateFile() {
 		this.ServeJSON()
 		return
 	}
-	file_path := save_dir + "/" + this.GetString("savename")
+	save_name := this.GetString("savename")
+	//如果文件以.json结尾，那么返回错误
+	if len(save_name) > 5 && save_name[len(save_name)-5:] == ".json" {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "上传文件名不能以.json结尾", nil)
+		this.ServeJSON()
+		return
+	}
+
+	file_path := save_dir + "/" + save_name
 
 	// 保存到数据库
-	file, err := models.CreateFile(this.GetString("savename"), id)
+	file, err := models.CreateFile(save_name, id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
