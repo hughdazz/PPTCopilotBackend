@@ -18,6 +18,16 @@ type User struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
+type UserResponse struct {
+	Id          int
+	Username    string
+	Password    string
+	Email       string
+	Description string
+	Created     string
+	Updated     string
+}
+
 func GetAllUsers() []User {
 	o := orm.NewOrm()
 	var users []User
@@ -151,4 +161,19 @@ func GetUserByEmail(email string) (User, error) {
 	user := User{Email: email}
 	err := o.Read(&user, "Email")
 	return user, err
+}
+
+func RefactUserTime(user User) UserResponse {
+	//时间加8小时
+	user.Created = user.Created.Add(time.Hour * 8)
+	user.Updated = user.Updated.Add(time.Hour * 8)
+	return UserResponse{
+		Id:          user.Id,
+		Username:    user.Username,
+		Password:    user.Password,
+		Email:       user.Email,
+		Description: user.Description,
+		Created:     user.Created.Format("2006-01-02 15:04:05"),
+		Updated:     user.Updated.Format("2006-01-02 15:04:05"),
+	}
 }
