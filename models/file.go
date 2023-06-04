@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -183,6 +184,20 @@ func SaveJsonsToFile(data interface{}, file_name string, project_id int) error {
 
 func UpdateFileName(project_id int, old_file_name string, new_file_name string) (File, error) {
 	o := orm.NewOrm()
+	// 如果新文件名已存在
+	_, err := GetFile(new_file_name, project_id)
+	if err == nil {
+		return File{}, errors.New("文件名已存在")
+	}
+
+	// 如果新文件名以.json结尾
+	if strings.HasSuffix(new_file_name, ".json") {
+		//如果旧文件名不以.json结尾
+		if !strings.HasSuffix(old_file_name, ".json") {
+			return File{}, errors.New("文件名格式错误")
+		}
+	}
+
 	file, err := GetFile(old_file_name, project_id)
 	if err != nil {
 		return File{}, err
