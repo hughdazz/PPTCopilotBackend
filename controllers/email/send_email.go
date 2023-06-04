@@ -17,19 +17,19 @@ func (this *Controller) SendEmail() {
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 	email := request.Email
 
-	_, err := models.GetUserByEmail(email)
-	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "邮箱不存在", email)
-		this.ServeJSON()
-		return
-	}
+	// _, err := models.GetUserByEmail(email)
+	// if err != nil {
+	// 	this.Data["json"] = controllers.MakeResponse(controllers.Err, "邮箱不存在", email)
+	// 	this.ServeJSON()
+	// 	return
+	// }
 
 	// 生成验证码
 	verificationCode := uuid.New().String()
 
 	// 将验证码保存到缓存中
 
-	err = models.SetCodeCache(email, verificationCode)
+	err := models.SetCodeCache(email, verificationCode)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "验证码缓存失败", nil)
 		this.ServeJSON()
