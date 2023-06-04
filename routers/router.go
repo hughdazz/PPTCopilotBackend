@@ -42,6 +42,7 @@ func init() {
 		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
 		beego.NSRouter("/:id/file/update_name", &project.Controller{}, "post:UpdateFileName"),
 		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
+		beego.NSRouter("/:id/json_file", &project.Controller{}, "post:CreateJsonFile"),
 		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
 	)
 	beego.AddNamespace(projectController)

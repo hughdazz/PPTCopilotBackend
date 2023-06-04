@@ -19,6 +19,16 @@ type Project struct {
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
+type ProjectResponse struct {
+	Id          int
+	Name        string
+	Description string
+	Creator     *User
+	Star        int
+	Created     string
+	Updated     string
+}
+
 func RefactProjects(projects []Project) []Project {
 	for i, project := range projects {
 		creator_temp, _ := GetUser(project.Creator.Id)
@@ -212,4 +222,15 @@ func UnstarProject(user_id int, project_id int) (Favorite, error) {
 		}
 	}
 	return favorite, nil
+}
+
+func RefactProjectTime(project Project) ProjectResponse {
+	//project时间加8
+	project.Created = project.Created.Add(8 * time.Hour)
+	project.Updated = project.Updated.Add(8 * time.Hour)
+	project_response := ProjectResponse{Id: project.Id, Name: project.Name, Description: project.Description, Creator: project.Creator, Star: project.Star}
+	project_response.Created = project.Created.Format("2006-01-02 15:04:05")
+	project_response.Updated = project.Updated.Format("2006-01-02 15:04:05")
+
+	return project_response
 }
