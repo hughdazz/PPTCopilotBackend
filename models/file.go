@@ -23,14 +23,6 @@ type File struct {
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
 
-type FileResponse struct {
-	Id      int
-	Name    string
-	Project *Project
-	Created string
-	Updated string
-}
-
 func RefactFiles(files []File) []File {
 	for i, file := range files {
 		project_temp, _ := GetProject(file.Project.Id)
@@ -226,19 +218,4 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 	}
 
 	return file, err
-}
-
-func RefactFileTime(file File) FileResponse {
-	// 时间加8小时
-	file.Created = file.Created.Add(8 * time.Hour)
-	file.Updated = file.Updated.Add(8 * time.Hour)
-
-	return FileResponse{
-		Id:      file.Id,
-		Name:    file.Name,
-		Project: file.Project,
-		Created: file.Created.Format("2006-01-02 15:04:05"),
-		Updated: file.Updated.Format("2006-01-02 15:04:05"),
-	}
-
 }
