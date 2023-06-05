@@ -25,6 +25,26 @@ func (this *Controller) UpdateProject() {
 		return
 	}
 	if request.Name != nil {
+		// 新名字不能为空串或
+		//判断项目名是否为空串、或仅由空格和制表符组成的串
+		if len(*request.Name) == 0 {
+			this.Data["json"] = controllers.MakeResponse(controllers.Err, "项目名不能为空", nil)
+			this.ServeJSON()
+			return
+		}
+		var is_space bool = true
+		for _, v := range *request.Name {
+			if v != ' ' && v != '\t' {
+				is_space = false
+				break
+			}
+		}
+		if is_space {
+			this.Data["json"] = controllers.MakeResponse(controllers.Err, "项目名不能为空", nil)
+			this.ServeJSON()
+			return
+		}
+
 		_, err := models.UpdateProjectName(id, *request.Name)
 		if err != nil {
 
