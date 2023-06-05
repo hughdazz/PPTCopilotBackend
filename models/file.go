@@ -194,7 +194,14 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 	if strings.HasSuffix(new_file_name, ".json") {
 		//如果旧文件名不以.json结尾
 		if !strings.HasSuffix(old_file_name, ".json") {
-			return File{}, errors.New("文件名格式错误")
+			return File{}, errors.New("文件名不能以.json结尾")
+		}
+	}
+
+	if strings.HasSuffix(old_file_name, ".json") {
+		//如果旧文件名以.json结尾
+		if !strings.HasSuffix(new_file_name, ".json") {
+			return File{}, errors.New("文件名必须以.json结尾")
 		}
 	}
 
