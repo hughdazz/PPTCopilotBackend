@@ -190,6 +190,11 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 		return File{}, errors.New("文件名已存在")
 	}
 
+	// 如果新文件名为空
+	if new_file_name == "" {
+		return File{}, errors.New("文件名不能为空")
+	}
+
 	// 如果新文件名以.json结尾
 	if strings.HasSuffix(new_file_name, ".json") {
 		//如果旧文件名不以.json结尾
